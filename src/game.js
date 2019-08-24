@@ -120,4 +120,16 @@ export default {
   'clear': ['Clear', 'Invisible']
 }
 
-
+export const colours = {
+  'red': 'red',
+  'orange': 'orange',
+  'yellow': 'yellow',
+  'green': 'green',
+  'blue': 'blue',
+  'purple': 'purple',
+  'pink': 'pink',
+  'brown': 'brown',
+  'black': 'black',
+  'gray': 'gray',
+  'white': 'white',
+}

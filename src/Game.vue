@@ -24,7 +24,7 @@
         <div class="iconRow">
           <div v-for="key in filteredConceptIds" :key="key" class="icon">
             <icon
-              :labels="concepts[key]"
+              :icon-key="key"
               @click.prevent.stop="clickIcon($event, key)"
             />
           </div>

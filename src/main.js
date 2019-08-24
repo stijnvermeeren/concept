@@ -3,12 +3,13 @@ import Vuex from 'vuex'
 import VueNativeSock from 'vue-native-websocket'
 import App from './App.vue'
 import store from './store'
-import webSocketUrl from '../config'
+import config from '../config'
 
 Vue.use(Vuex)
+console.log(config.webSocketUrl)
 Vue.use(
   VueNativeSock,
-  webSocketUrl,
+  config.webSocketUrl,
   {
     store: store,
     format: 'json',

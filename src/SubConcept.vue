@@ -4,7 +4,7 @@
       v-for="{key, count}, iconIndex in summarize"
       :class="['icon', {mainIcon: iconIndex === 0}]"
     >
-      <icon :labels="concepts[key]" />
+      <icon :icon-key="key" />
       <div :class="['pawns', colorClass]">
         <pawn v-for="pawnType in pawns(iconIndex, count)" :type="pawnType" />
       </div>
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-  import concepts from './game.js'
   import Icon from './Icon.vue'
   import Pawn from './Pawn.vue'
 
@@ -31,9 +30,6 @@
     computed: {
       myGame() {
         return this.$store.getters.myGame
-      },
-      concepts() {
-        return concepts
       },
       colorClass() {
         switch (this.index) {
