@@ -20,14 +20,6 @@
 
       <div v-if="myGame">
         <h2>Add icons to your concept</h2>
-        <div>
-          Test: <v-btn
-            icon
-            color="primary"
-          >
-            <v-icon>add_box</v-icon>
-          </v-btn>
-        </div>
         <div>Filter: <input type="text" v-model="query" /></div>
         <div class="iconRow">
           <div v-for="key in filteredConceptIds" :key="key" class="icon">
