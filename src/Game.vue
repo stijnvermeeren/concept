@@ -3,7 +3,7 @@
     <p v-if="$store.state.socket.isConnected" class="connected">Connected</p>
     <p v-else class="disconnected">Disconnected</p>
 
-    <p><button @click="newGame()">Start a new game</button> (you'll be defining the concept)</p>
+    <p><v-btn @click="newGame()">Start a new game</v-btn> (you'll be defining the concept)</p>
 
     <div v-if="$store.state.gameId">
       <h2>Selected concept</h2>
@@ -20,7 +20,14 @@
 
       <div v-if="myGame">
         <h2>Add icons to your concept</h2>
-        <div>Filter: <input type="text" v-model="query" /></div>
+        <div>
+          <v-text-field
+            label="Filter concepts"
+            placeholder="Query"
+            filled
+            v-model="query"
+          />
+        </div>
         <div class="iconRow">
           <div v-for="key in filteredConceptIds" :key="key" class="icon">
             <v-menu>

@@ -7,13 +7,13 @@
       </div>
       <div v-else>
         <div class="userName">
-          <input v-model="userName" placeholder="Enter your name" />
+          <v-text-field v-model="userName" placeholder="Enter your name" />
         </div>
         <div v-if="$store.state.gameId" class="joinGame">
-          <button @click="joinGame()" :disabled="!userName">Join game</button>
+          <v-btn @click="joinGame()" :disabled="!userName">Join game</v-btn>
         </div>
         <div v-else class="joinGame">
-          <button @click="joinGame()" :disabled="!userName">Start a new game</button>
+          <v-btn @click="joinGame()" :disabled="!userName">Start a new game</v-btn>
         </div>
       </div>
     </div>
