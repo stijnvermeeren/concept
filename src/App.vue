@@ -1,24 +1,23 @@
 <template>
-  <div :class="{waiting: isWaiting}">
-    <h1>Concept: online version</h1>
-    <div v-if="inGame">
-      <game></game>
+  <v-app>
+    <div :class="{waiting: isWaiting}">
+      <h1>Concept: online version</h1>
+      <div v-if="inGame">
+        <game></game>
+      </div>
+      <div v-else>
+        <div class="userName">
+          <input v-model="userName" placeholder="Enter your name" />
+        </div>
+        <div v-if="$store.state.gameId" class="joinGame">
+          <button @click="joinGame()" :disabled="!userName">Join game</button>
+        </div>
+        <div v-else class="joinGame">
+          <button @click="joinGame()" :disabled="!userName">Start a new game</button>
+        </div>
+      </div>
     </div>
-    <div v-else>
-      <div class="userName">
-        <input v-model="userName" placeholder="Enter your name" />
-      </div>
-      <div v-if="$store.state.gameId" class="joinGame">
-        <button @click="joinGame()" :disabled="!userName">Join game</button>
-      </div>
-      <div v-else-if="canStartNewGame" class="joinGame">
-        <button @click="joinGame()" :disabled="!userName">Start a new game</button>
-      </div>
-      <div v-else class="searchingForActiveGame">
-        Please wait while looking for active games...
-      </div>
-    </div>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -32,8 +31,7 @@ export default {
   data() {
     return {
       timer: undefined,
-      userName: '',
-      canStartNewGame: false
+      userName: ''
     }
   },
   computed: {
@@ -48,13 +46,6 @@ export default {
     joinGame() {
       this.$store.commit('joinGame', { userName: this.userName })
     }
-  },
-  created() {
-    this.timer = setTimeout(() => {
-      if (!this.$store.state.gameId) {
-        this.canStartNewGame = true;
-      }
-    }, 7000)
   }
 }
 </script>

@@ -35,7 +35,6 @@
 
 <style scoped>
   .icon {
-    margin: 5px 10px;
     padding: 5px;
   }
 

@@ -20,22 +20,44 @@
 
       <div v-if="myGame">
         <h2>Add icons to your concept</h2>
+        <div>
+          Test: <v-btn
+            icon
+            color="primary"
+          >
+            <v-icon>add_box</v-icon>
+          </v-btn>
+        </div>
         <div>Filter: <input type="text" v-model="query" /></div>
         <div class="iconRow">
           <div v-for="key in filteredConceptIds" :key="key" class="icon">
+            <v-menu>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  icon
+                  absolute
+                  top
+                  right
+                  small
+                  color="primary"
+                  v-on="on"
+                >
+                  <v-icon>add_box</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item v-for="option in contextOptions" :key="option.index">
+                  <v-list-item-title @click="addFromQuery(key, option.index)">
+                    {{option.name}}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
             <icon
               :icon-key="key"
-              @click.prevent.stop="clickIcon($event, key)"
             />
           </div>
         </div>
-
-        <vue-simple-context-menu
-          elementId="vueSimpleContextMenu"
-          :options="contextOptions"
-          ref="vueSimpleContextMenu"
-          @option-clicked="optionClicked">
-        </vue-simple-context-menu>
       </div>
     </div>
   </div>
@@ -43,10 +65,8 @@
 
 <script>
 import concepts from './game.js'
-import VueSimpleContextMenu from 'vue-simple-context-menu'
 const uuidv4 = require('uuid/v4');
 
-import 'vue-simple-context-menu/dist/vue-simple-context-menu.css'
 import Icon from './Icon.vue'
 import SubConcept from './SubConcept'
 
@@ -54,7 +74,6 @@ export default {
   name: 'game',
   components: {
     SubConcept,
-    VueSimpleContextMenu,
     Icon
   },
   data() {
@@ -99,12 +118,6 @@ export default {
     },
     ucFirst(value) {
       return value.charAt(0).toUpperCase() + value.slice(1)
-    },
-    clickIcon(event, key) {
-      this.$refs.vueSimpleContextMenu.showMenu(event, key)
-    },
-    optionClicked(data) {
-      this.addFromQuery(data.item, data.option.index)
     },
     addFromQuery(key, index) {
       this.add(key, index)
@@ -190,6 +203,6 @@ export default {
 
   .icon {
     display: inline-block;
-    vertical-align: top;
+    position: relative;
   }
 </style>

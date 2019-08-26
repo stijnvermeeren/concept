@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Vuetify from 'vuetify'
 import VueNativeSock from 'vue-native-websocket'
 import App from './App.vue'
 import store from './store'
 import config from '../config'
 
 Vue.use(Vuex)
-console.log(config.webSocketUrl)
+
+Vue.use(Vuetify)
+
 Vue.use(
   VueNativeSock,
   config.webSocketUrl,
@@ -21,5 +24,6 @@ Vue.use(
 
 new Vue({
   render: h => h(App),
-  store
+  store,
+  vuetify: new Vuetify()
 }).$mount('#app')
