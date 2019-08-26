@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Vuetify from 'vuetify'
+import Vuetify from 'vuetify/lib'
 import VueNativeSock from 'vue-native-websocket'
 import App from './App.vue'
 import store from './store'
