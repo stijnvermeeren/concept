@@ -6,15 +6,7 @@
         <game></game>
       </div>
       <div v-else>
-        <div class="userName">
-          <v-text-field v-model="userName" placeholder="Enter your name" />
-        </div>
-        <div v-if="$store.state.gameId" class="joinGame">
-          <v-btn @click="joinGame()" :disabled="!userName">Join game</v-btn>
-        </div>
-        <div v-else class="joinGame">
-          <v-btn @click="joinGame()" :disabled="!userName">Start a new game</v-btn>
-        </div>
+        Loading...
       </div>
     </div>
   </v-app>
@@ -28,12 +20,6 @@ export default {
   components: {
     Game
   },
-  data() {
-    return {
-      timer: undefined,
-      userName: ''
-    }
-  },
   computed: {
     inGame() {
       return this.$store.state.inGame
@@ -44,7 +30,7 @@ export default {
   },
   methods: {
     joinGame() {
-      this.$store.commit('joinGame', { userName: this.userName })
+      this.$store.commit('joinGame')
     }
   }
 }
@@ -53,16 +39,5 @@ export default {
 <style>
   .waiting * {
     cursor: progress;
-  }
-
-  div.userName {
-    margin: 1em 2em;
-  }
-  div.joinGame {
-    margin: 1em 2em;
-  }
-  div.searchingForActiveGame {
-    margin: 1em 2em;
-    font-style: italic;
   }
 </style>

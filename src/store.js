@@ -10,8 +10,6 @@ export default new Vuex.Store({
       reconnectError: false,
     },
     inGame: false,
-    gameId: undefined,
-    gameUserName: undefined,
     requestedGameId: undefined,
     waitForStateId: undefined,
     concept: []
@@ -28,6 +26,12 @@ export default new Vuex.Store({
     SOCKET_ONOPEN (state, event)  {
       Vue.prototype.$socket = event.currentTarget
       state.socket.isConnected = true
+      Vue.prototype.$socket.sendObj({
+        message: 'sendMessage',
+        data: {
+          action: 'getGameState'
+        }
+      })
     },
     SOCKET_ONCLOSE (state, event)  {
       state.socket.isConnected = false
@@ -53,27 +57,16 @@ export default new Vuex.Store({
       state.waitForStateId = stateId
     },
     newMessage(state, { data }) {
-      if (data.action === 'newGame') {
-        state.gameId = data.gameId
-        state.gameUserName = data.gameUserName
-        state.concept = []
-      }
-
-      if (data.action === 'newConcept') {
-        if (!state.gameId) {
-          state.gameId = data.gameId
-          state.gameUserName = data.gameUserName
-        }
-
-        if (state.waitForStateId === data.stateId) {
+      if (data.action === 'newState') {
+        state.inGame = true;
+        if (state.waitForStateId === data.state.id) {
           state.waitForStateId = undefined
         }
-        state.concept = data.concept
+        state.concept = data.state.concept
       }
     },
-    joinGame(state, { userName }) {
+    joinGame(state) {
       this.state.inGame = true;
-      this.state.userName = userName;
     }
   }
 })

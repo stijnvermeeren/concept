@@ -3,23 +3,19 @@
     <p v-if="$store.state.socket.isConnected" class="connected">Connected</p>
     <p v-else class="disconnected">Disconnected</p>
 
-    <p><v-btn @click="newGame()">Start a new game</v-btn> (you'll be defining the concept)</p>
+    <p><v-btn @click="newGame()">Reset (start a new game)</v-btn></p>
 
-    <div v-if="$store.state.gameId">
+    <div>
       <h2>Selected concept</h2>
-      <div v-if="!myGame">Player <em>{{$store.state.gameUserName}}</em> is in control.</div>
-      <div v-if="! $store.state.concept.length">
-        <div v-if="myGame">Start defining your concept below...</div>
-        <div v-else>Wait for <em>{{$store.state.gameUserName}}</em> to define a concept...</div>
-      </div>
-      <div v-else>
+      <div>
+        <div v-if="!$store.state.concept.length">No concept defined.</div>
         <div v-for="(subConcept, index) in $store.state.concept">
           <sub-concept :iconKeys="subConcept" :index="index" @add="add($event, index)" @remove="remove($event, index)" />
         </div>
       </div>
 
-      <div v-if="myGame">
-        <h2>Add icons to your concept</h2>
+      <div>
+        <h2>Add icons to the concept</h2>
         <div>
           <v-text-field
             label="Filter concepts"
@@ -77,7 +73,6 @@ export default {
   },
   data() {
     return {
-      timer: undefined,
       concept: [],
       query: ''
     }
@@ -149,45 +144,18 @@ export default {
       this.$socket.sendObj({
         message: 'sendMessage',
         data: {
-          action: 'newConcept',
-          gameId: this.$store.state.gameId,
-          gameUserName: this.$store.state.gameUserName,
-          stateId: stateId,
-          concept: this.concept
+          action: 'newState',
+          state: {
+            id: stateId,
+            concept: this.concept
+          }
         }
       })
     },
     newGame() {
-      const gameId = uuidv4()
-      this.$store.commit('requestGameId', gameId)
-      this.$socket.sendObj({
-        message: 'sendMessage',
-        data: {
-          action: 'newGame',
-          gameId: gameId,
-          gameUserName: this.$store.state.userName,
-        }
-      })
+      this.concept = [];
+      this.send();
     }
-  },
-  created() {
-    this.timer = setInterval(() => {
-      if (this.myGame) {
-        this.$socket.sendObj({
-          message: 'sendMessage',
-          data: {
-            action: 'newConcept',
-            gameId: this.$store.state.gameId,
-            gameUserName: this.$store.state.gameUserName,
-            stateId: this.$store.state.waitForStateId,
-            concept: this.concept
-          }
-        })
-      }
-    }, 5000)
-  },
-  destroyed() {
-    clearInterval(this.timer)
   }
 }
 </script>
