@@ -14,7 +14,7 @@
           case 'exclamation':
             return '!'
           default:
-            return '.'
+            return '■'
         }
       }
     }

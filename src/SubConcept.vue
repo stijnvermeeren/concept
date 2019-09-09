@@ -2,15 +2,37 @@
   <div class="container">
     <div
       v-for="{key, count}, iconIndex in summarize"
-      :class="['icon', {mainIcon: iconIndex === 0}]"
+      :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
     >
-      <icon :icon-key="key" />
+      <div class="icon">
+        <icon :icon-key="key" />
+        <v-btn
+          @click="$emit('add', key)"
+          title="Add another marker"
+          icon
+          small
+          absolute
+          top
+          right
+          color="primary"
+        >
+          <v-icon>add_box</v-icon>
+        </v-btn>
+        <v-btn
+          title="Remove marker"
+          @click="$emit('remove', key)"
+          icon
+          small
+          absolute
+          top
+          left
+          color="primary"
+        >
+          <v-icon>remove_circle_outline</v-icon>
+        </v-btn>
+      </div>
       <div :class="['pawns', colorClass]">
         <pawn v-for="pawnType in pawns(iconIndex, count)" :type="pawnType" />
-      </div>
-      <div v-if="myGame" class="edit">
-        <button @click="$emit('add', key)">+</button>
-        <button @click="$emit('remove', key)">-</button>
       </div>
     </div>
   </div>
@@ -34,15 +56,15 @@
       colorClass() {
         switch (this.index) {
           case 0:
-            return 'green'
+            return 'green--text'
           case 1:
-            return 'blue'
+            return 'blue--text'
           case 2:
-            return 'red'
+            return 'red--text'
           case 3:
-            return 'yellow'
+            return 'yellow--text'
           default:
-            return 'black'
+            return 'black--text'
         }
       },
       summarize() {
@@ -82,10 +104,27 @@
     display: flex;
   }
 
-  .icon {
+  .subConceptItem {
     display: flex;
     align-items: center;
     margin-right: 25px;
+  }
+
+  .icon {
+    position: relative;
+    padding-top: 12px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .v-btn--absolute.v-btn--right {
+    right: 0;
+  }
+  .v-btn--absolute.v-btn--top {
+    top: 0;
+  }
+  .v-btn--absolute.v-btn--left {
+    left: 0;
   }
 
   .edit {

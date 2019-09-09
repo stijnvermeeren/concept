@@ -25,8 +25,17 @@
           />
         </div>
         <div class="iconRow">
-          <div v-for="key in filteredConceptIds" :key="key" class="icon">
-            <v-menu>
+          <div v-if="filteredConceptIds.length === 0">No icons matching the query</div>
+          <div
+            v-for="key in Object.keys(concepts)"
+            v-show="filteredConceptIds.includes(key)"
+            :key="key"
+            class="icon"
+          >
+            <icon
+              :icon-key="key"
+            />
+            <v-menu offset-y full-width>
               <template v-slot:activator="{ on }">
                 <v-btn
                   icon
@@ -40,17 +49,19 @@
                   <v-icon>add_box</v-icon>
                 </v-btn>
               </template>
-              <v-list>
-                <v-list-item v-for="option in contextOptions" :key="option.index">
-                  <v-list-item-title @click="addFromQuery(key, option.index)">
-                    {{option.name}}
-                  </v-list-item-title>
-                </v-list-item>
+              <v-list dense>
+                <v-subheader>{{concepts[key].join(', ')}}</v-subheader>
+                <v-list-item-group>
+                  <v-list-item v-for="option in contextOptions" :key="option.index">
+                    <v-list-item-content>
+                      <v-list-item-title @click="add(key, option.index)">
+                        {{option.name}}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
               </v-list>
             </v-menu>
-            <icon
-              :icon-key="key"
-            />
           </div>
         </div>
       </div>
@@ -73,11 +84,13 @@ export default {
   },
   data() {
     return {
-      concept: [],
       query: ''
     }
   },
   computed: {
+    concept() {
+      return this.$store.state.concept;
+    },
     concepts() {
       return concepts
     },
@@ -93,7 +106,7 @@ export default {
     },
     contextOptions() {
       if (this.concept.length === 0) {
-        return [{ name: 'Define as main concept', index: 0 }]
+        return [{ name: 'Add as main concept', index: 0 }]
       }
 
       const options = this.concept.map((concept, i) => {
@@ -102,7 +115,7 @@ export default {
         return { name: `Add to ${name} (${iconName})`, index: i }
       })
 
-      options.push({ name: 'Define as new sub-concept', index: this.concept.length });
+      options.push({ name: 'Add as new sub-concept', index: this.concept.length });
       return options
     }
   },
@@ -113,32 +126,30 @@ export default {
     ucFirst(value) {
       return value.charAt(0).toUpperCase() + value.slice(1)
     },
-    addFromQuery(key, index) {
-      this.add(key, index)
-      this.query = '';
-    },
     add(key, index) {
+      const concept = this.concept;
       if (this.concept.length <= index) {
-        this.concept.push([key])
+        concept.push([key])
       } else {
-        this.concept[index].push(key)
+        concept[index].push(key)
       }
 
-      this.send()
-      this.query = '';
+      this.send(concept)
+      this.query = ''
     },
     remove(key, index) {
-      const iconIndex = this.concept[index].lastIndexOf(key)
+      const concept = this.concept;
+      const iconIndex = concept[index].lastIndexOf(key)
       if (iconIndex > -1) {
         if (iconIndex === 0) {
-          this.concept.splice(index, 1)
+          concept.splice(index, 1)
         } else {
-          this.concept[index].splice(iconIndex, 1)
+          concept[index].splice(iconIndex, 1)
         }
-        this.send()
+        this.send(concept)
       }
     },
-    send() {
+    send(concept) {
       const stateId = uuidv4()
       this.$store.commit('waitForStateId', stateId)
       this.$socket.sendObj({
@@ -147,14 +158,13 @@ export default {
           action: 'newState',
           state: {
             id: stateId,
-            concept: this.concept
+            concept: concept
           }
         }
       })
     },
     newGame() {
-      this.concept = [];
-      this.send();
+      this.send([]);
     }
   }
 }
@@ -171,5 +181,20 @@ export default {
   .icon {
     display: inline-block;
     position: relative;
+    padding-top: 12px;
+    padding-right: 12px;
+  }
+
+  .v-btn--absolute.v-btn--right{
+    right: 0;
+  }
+  .v-btn--absolute.v-btn--top{
+    top: 0;
+  }
+  .v-btn--absolute.v-btn--right{
+    right: 0;
+  }
+  .v-btn--absolute.v-btn--top{
+    top: 0;
   }
 </style>

@@ -1,14 +1,18 @@
 <template>
   <v-app>
-    <div :class="{waiting: isWaiting}">
-      <h1>Concept: online version</h1>
-      <div v-if="inGame">
-        <game></game>
-      </div>
-      <div v-else>
-        Loading...
-      </div>
-    </div>
+    <v-content>
+      <v-container fluid>
+        <div :class="{waiting: isWaiting}">
+          <h1>Concept: online version</h1>
+          <div v-if="inGame">
+            <game></game>
+          </div>
+          <div v-else>
+            Loading...
+          </div>
+        </div>
+      </v-container>
+    </v-content>
   </v-app>
 </template>
 
