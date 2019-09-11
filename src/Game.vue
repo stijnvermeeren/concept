@@ -3,25 +3,49 @@
     <p v-if="$store.state.socket.isConnected" class="connected">Connected</p>
     <p v-else class="disconnected">Disconnected</p>
 
-    <p><v-btn @click="newGame()">Reset (start a new game)</v-btn></p>
-
     <div>
-      <h2>Selected concept</h2>
+      <h2>Selected concept
+        <v-btn @click="newGame()" class="float-right">Reset (start a new game)</v-btn></h2>
       <div>
         <div v-if="!$store.state.concept.length">No concept defined.</div>
-        <div v-for="(subConcept, index) in $store.state.concept">
-          <sub-concept :iconKeys="subConcept" :index="index" @add="add($event, index)" @remove="remove($event, index)" />
-        </div>
+        <v-container v-else>
+          <v-row justify="start">
+            <v-col v-for="(subConcept, index) in $store.state.concept" :key="index" class="subConcept">
+              <sub-concept :iconKeys="subConcept" :index="index" @add="add($event, index)" @remove="remove($event, index)" />
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
 
       <div>
         <h2>Add icons to the concept</h2>
         <div>
+          <v-radio-group
+            v-model="filter"
+            mandatory
+            row
+            light
+            label="Quick filter"
+            hide-details
+            class="px-3 my-2"
+          >
+            <v-radio
+              v-for="(filter, index) in filters"
+              :key="index"
+              :label="filter.name"
+              :value="index"
+            />
+          </v-radio-group>
+        </div>
+        <div>
           <v-text-field
-            label="Filter concepts"
+            v-model="query"
+            label="Filter concepts by query"
             placeholder="Query"
             filled
-            v-model="query"
+            clearable
+            class="my-2"
+            hide-details
           />
         </div>
         <div class="iconRow">
@@ -70,7 +94,7 @@
 </template>
 
 <script>
-import concepts from './game.js'
+import concepts, { filters } from './game.js'
 const uuidv4 = require('uuid/v4');
 
 import Icon from './Icon.vue'
@@ -84,6 +108,7 @@ export default {
   },
   data() {
     return {
+      filter: 0,
       query: ''
     }
   },
@@ -94,10 +119,14 @@ export default {
     concepts() {
       return concepts
     },
+    filters() {
+      return filters
+    },
     filteredConceptIds() {
-      return Object.keys(concepts).filter(conceptId => {
+      return filters[this.filter].keys.filter(conceptId => {
         return !! concepts[conceptId].join('/').split('/').find(label => {
-          return label.toLowerCase().startsWith(this.query.toLowerCase())
+          const lowerCaseQuery = this.query ? this.query.toLowerCase() : ''
+          return label.toLowerCase().startsWith(lowerCaseQuery)
         })
       })
     },
@@ -185,16 +214,24 @@ export default {
     padding-right: 12px;
   }
 
-  .v-btn--absolute.v-btn--right{
+  .iconRow {
+    transition: height 3s;
+  }
+
+  .v-btn--absolute.v-btn--right {
     right: 0;
   }
-  .v-btn--absolute.v-btn--top{
+  .v-btn--absolute.v-btn--top {
     top: 0;
   }
-  .v-btn--absolute.v-btn--right{
+  .v-btn--absolute.v-btn--right {
     right: 0;
   }
-  .v-btn--absolute.v-btn--top{
+  .v-btn--absolute.v-btn--top {
     top: 0;
+  }
+
+  div.subConcept {
+    display: inline-block;
   }
 </style>

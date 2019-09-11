@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <v-sheet :class="[colorClass, 'container', 'pa-1', 'ma-0']">
     <div
       v-for="{key, count}, iconIndex in summarize"
       :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
@@ -31,11 +31,11 @@
           <v-icon>remove_circle_outline</v-icon>
         </v-btn>
       </div>
-      <div :class="['pawns', colorClass]">
+      <div :class="['pawns']">
         <pawn v-for="pawnType in pawns(iconIndex, count)" :type="pawnType" />
       </div>
     </div>
-  </div>
+  </v-sheet>
 </template>
 
 <script>
@@ -56,15 +56,15 @@
       colorClass() {
         switch (this.index) {
           case 0:
-            return 'green--text'
+            return 'green lighten-3'
           case 1:
-            return 'blue--text'
+            return 'blue lighten-3'
           case 2:
-            return 'red--text'
+            return 'red lighten-3'
           case 3:
-            return 'yellow--text'
+            return 'deep-orange lighten-3'
           default:
-            return 'black--text'
+            return 'blue-grey lighten-3'
         }
       },
       summarize() {
@@ -127,33 +127,8 @@
     left: 0;
   }
 
-  .edit {
-    display: flex;
-    flex-direction: column;
-    margin: 10px;
-  }
-
   .mainIcon {
     font-weight: bold;
   }
 
-  .green {
-    color: green;
-  }
-
-  .blue {
-    color: blue;
-  }
-
-  .red {
-    color: red;
-  }
-
-  .yellow {
-    color: saddlebrown;
-  }
-
-  .black {
-    color: black;
-  }
 </style>

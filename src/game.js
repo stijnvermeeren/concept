@@ -1,5 +1,5 @@
 
-export default {
+const concepts = {
   'object': ['Object', 'Thing', 'Package'],
   'person': ['Person', 'Family', 'Group'],
   'female': ['Female/Woman', 'Wife', 'Feminine'],
@@ -120,6 +120,8 @@ export default {
   'clear': ['Clear', 'Invisible']
 }
 
+export default concepts
+
 export const colours = {
   'red': 'red',
   'orange': 'orange',
@@ -133,3 +135,26 @@ export const colours = {
   'gray': 'gray',
   'white': 'white',
 }
+
+export const filters = [
+  {
+    'name': 'All',
+    'keys': Object.keys(concepts)
+  },
+  {
+    'name': 'Body',
+    'keys': ['head', 'arm', 'torso', 'leg', 'ear', 'nose', 'eye', 'mouth']
+  },
+  {
+    'name': 'Elements',
+    'keys': ['cloud', 'lightning', 'night', 'sun', 'fire', 'water', 'air', 'earth', 'rock', 'wood', 'metal', 'fabric', 'plastic', 'paper']
+  },
+  {
+    'name': 'Shapes',
+    'keys': ['straight', 'curve', 'cross', 'broken', 'spiral', 'sinusoidal', 'ring', 'circle', 'triangle', 'star', 'rectangle', 'flat', 'cube', 'sphere', 'pyramid', 'cylinder', 'cone', 'hollow']
+  },
+  {
+    'name': 'Colours',
+    'keys': ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown', 'black', 'gray', 'white', 'clear']
+  }
+]
