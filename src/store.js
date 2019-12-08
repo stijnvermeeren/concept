@@ -27,7 +27,7 @@ export default new Vuex.Store({
       Vue.prototype.$socket = event.currentTarget
       state.socket.isConnected = true
       Vue.prototype.$socket.sendObj({
-        message: 'sendMessage',
+        message: 'sendmessage',
         data: {
           action: 'getGameState'
         }

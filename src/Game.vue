@@ -182,7 +182,7 @@ export default {
       const stateId = uuidv4()
       this.$store.commit('waitForStateId', stateId)
       this.$socket.sendObj({
-        message: 'sendMessage',
+        message: 'sendmessage',
         data: {
           action: 'newState',
           state: {

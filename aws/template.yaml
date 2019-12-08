@@ -1,9 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  concept-websockets-api
-
-  Server for the application https://github.com/stijnvermeeren/concept
+Description: Server for the application https://github.com/stijnvermeeren/concept
 
 Parameters:
   Prefix:
