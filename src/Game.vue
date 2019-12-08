@@ -75,15 +75,18 @@
               </template>
               <v-list dense>
                 <v-subheader>{{concepts[key].join(', ')}}</v-subheader>
-                <v-list-item-group>
-                  <v-list-item v-for="option in contextOptions" :key="option.index">
-                    <v-list-item-content>
-                      <v-list-item-title @click="add(key, option.index)">
-                        {{option.name}}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list-item-group>
+                <v-list-item
+                  v-for="option in contextOptions"
+                  :key="option.index"
+                  @click="add(key, option.index)"
+                  active-class=""
+                >
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{option.name}}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
               </v-list>
             </v-menu>
           </div>
@@ -156,6 +159,10 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1)
     },
     add(key, index) {
+
+      // eslint-disable-next-line
+      console.log("add", key, index)
+
       const concept = this.concept;
       if (this.concept.length <= index) {
         concept.push([key])
