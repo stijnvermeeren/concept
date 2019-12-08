@@ -159,10 +159,6 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1)
     },
     add(key, index) {
-
-      // eslint-disable-next-line
-      console.log("add", key, index)
-
       const concept = this.concept;
       if (this.concept.length <= index) {
         concept.push([key])
