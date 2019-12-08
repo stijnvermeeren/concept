@@ -1,6 +1,6 @@
 # Concept
 
-An implementation for playing the game of [Concept](https://concept-the-game.com/) by Repos Productions online. Different players can connect to the same game and can follow the concept that is being define in real-time.
+An implementation for playing the game of [Concept](https://concept-the-game.com/) by Repos Productions online. Different players can connect to the same game and can follow the concept that is being defined in real-time.
  
 The frontend is written in Vue.js. The backend is written for serverless deployment on AWS. The frontend-backend communication uses websockets.
 
