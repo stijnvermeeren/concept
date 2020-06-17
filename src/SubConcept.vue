@@ -2,6 +2,7 @@
   <v-sheet :class="[colorClass, 'container', 'pa-1', 'ma-0']">
     <div
       v-for="{key, count}, iconIndex in summarize"
+      :key="iconIndex"
       :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
     >
       <div class="icon">
@@ -32,7 +33,11 @@
         </v-btn>
       </div>
       <div :class="['pawns']">
-        <pawn v-for="pawnType in pawns(iconIndex, count)" :type="pawnType" />
+        <pawn
+          v-for="(pawnType, index) in pawns(iconIndex, count)"
+          :key="index"
+          :type="pawnType"
+        />
       </div>
     </div>
   </v-sheet>

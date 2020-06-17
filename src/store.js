@@ -33,7 +33,7 @@ export default new Vuex.Store({
         }
       })
     },
-    SOCKET_ONCLOSE (state, event)  {
+    SOCKET_ONCLOSE (state)  {
       state.socket.isConnected = false
     },
     SOCKET_ONERROR (state, event)  {
@@ -65,7 +65,7 @@ export default new Vuex.Store({
         state.concept = data.state.concept
       }
     },
-    joinGame(state) {
+    joinGame() {
       this.state.inGame = true;
     }
   }
