@@ -118,7 +118,7 @@ Resources:
       CodeUri: onconnect/
       Handler: app.handler
       MemorySize: 256
-      Runtime: nodejs10.x
+      Runtime: nodejs14.x
       Environment:
         Variables:
           PREFIX: !Ref Prefix
@@ -141,7 +141,7 @@ Resources:
       CodeUri: ondisconnect/
       Handler: app.handler
       MemorySize: 256
-      Runtime: nodejs10.x
+      Runtime: nodejs14.x
       Environment:
         Variables:
           PREFIX: !Ref Prefix
@@ -164,7 +164,7 @@ Resources:
       CodeUri: sendmessage/
       Handler: app.handler
       MemorySize: 256
-      Runtime: nodejs10.x
+      Runtime: nodejs14.x
       Environment:
         Variables:
           PREFIX: !Ref Prefix
