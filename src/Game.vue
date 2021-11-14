@@ -97,8 +97,8 @@
 </template>
 
 <script>
-import concepts, { filters } from './game.js'
-const uuidv4 = require('uuid/v4');
+import concepts, { filters } from './util/game.js'
+import { v4 as uuidv4 } from 'uuid';
 
 import Icon from './Icon.vue'
 import SubConcept from './SubConcept'

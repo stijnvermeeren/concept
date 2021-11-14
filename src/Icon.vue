@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import concepts, { colours } from './game'
+  import concepts, { colours } from './util/game.js'
 
   export default {
     name: 'Concept',

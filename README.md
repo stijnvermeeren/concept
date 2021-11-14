@@ -36,7 +36,7 @@ sam deploy \
     --parameter-overrides Prefix=REPLACE_WITH_YOUR_PREFIX
 ```
 
-Not the URL of the created Websocket API, which needs to be defined as an environment variable when building the frontend.
+Note the URL of the created Websocket API, which needs to be defined as an environment variable when building the frontend.
 
 ## Frontend setup
 
