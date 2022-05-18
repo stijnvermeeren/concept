@@ -10,33 +10,9 @@ The frontend is written in Vue.js. The backend is written for serverless deploym
   - AWS backend based on a template by the AWS team.
 - Icons by Melina Found.
 
-## Backend setup
+## Deployment to AWS using Pulumi
 
-Install the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) and use it to package and deploy the application to your AWS account.
-
-### Packaging
-Packaging will bundle the necessary Lamdba functions and upload them to S3. A `packages.yaml` CloudFormation template file will be created with the correct references to the created S3 objects.
-
-```
-sam package \
-    --template-file aws/template.yaml \
-    --output-template-file aws/packaged.yaml \
-    --s3-bucket REPLACE_WITH_YOUR_S3_BUCKET_NAME
-```
-
-
-### Deploying
-Deploying will deploy an AWS CloudFormation stack with all the resources (Lambda functions, DynamoDB tables, API Gateway, etc.) for the backend of this application.
-
-```
-sam deploy \
-    --template-file aws/packaged.yaml \
-    --stack-name REPLACE_WITH_YOUR_STACK_NAME \
-    --capabilities CAPABILITY_IAM \
-    --parameter-overrides Prefix=REPLACE_WITH_YOUR_PREFIX
-```
-
-Note the URL of the created Websocket API, which needs to be defined as an environment variable when building the frontend.
+The recommended way of deploying this application is using [AWS](https://aws.amazon.com/) and [Pulumi](https://www.pulumi.com/). After having installed Pulumi and configured Pulumi to access your AWS account, go to the `pulumi` subdirectory of this project and run the command `pulumi up` to deploy the whole stack. The `websocket_url`, which is required for the frontend configuration, will be provided as an output of this command. 
 
 ## Frontend setup
 

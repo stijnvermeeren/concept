@@ -37,7 +37,7 @@ export default new Vuex.Store({
       state.socket.isConnected = false
     },
     SOCKET_ONERROR (state, event)  {
-      console.error(state, event)
+      console.error("Error", state, event)
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE (state, message)  {
@@ -45,7 +45,7 @@ export default new Vuex.Store({
     },
     // mutations for reconnect methods
     SOCKET_RECONNECT(state, count) {
-      console.info(state, count)
+      console.info("Reconnect", state, count)
     },
     SOCKET_RECONNECT_ERROR(state) {
       state.socket.reconnectError = true;

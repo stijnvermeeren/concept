@@ -5,8 +5,7 @@ var AWS = require("aws-sdk");
 AWS.config.update({ region: process.env.AWS_REGION });
 var DDB = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
 
-const prefix = process.env.PREFIX
-const connectionsTable = `${prefix}_connections`
+const connectionsTable = process.env.CONNECTIONS_TABLE
 
 exports.handler = function (event, context, callback) {
   var deleteParams = {

@@ -5,9 +5,8 @@ const AWS = require('aws-sdk');
 
 const ddb = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
 
-const prefix = process.env.PREFIX
-const connectionsTable = `${prefix}_connections`
-const gamesTable = `${prefix}_games`
+const connectionsTable = process.env.CONNECTIONS_TABLE
+const gamesTable = process.env.GAMES_TABLE
 
 exports.handler = async (event, context) => {
   const apigwManagementApi = new AWS.ApiGatewayManagementApi({

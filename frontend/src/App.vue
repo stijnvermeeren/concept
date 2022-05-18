@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content>
+    <v-main>
       <v-container fluid>
         <div :class="{waiting: isWaiting}">
           <h1>Concept: online version</h1>
@@ -12,7 +12,7 @@
           </div>
         </div>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

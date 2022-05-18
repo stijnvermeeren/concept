@@ -5,8 +5,7 @@ var AWS = require("aws-sdk");
 AWS.config.update({ region: process.env.AWS_REGION });
 var ddb = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
 
-const prefix = process.env.PREFIX
-const connectionsTable = `${prefix}_connections`
+const connectionsTable = process.env.CONNECTIONS_TABLE
 
 exports.handler = async function (event, context) {
   const apigwManagementApi = new AWS.ApiGatewayManagementApi({
