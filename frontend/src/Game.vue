@@ -7,11 +7,11 @@
       <h2>Selected concept
         <v-btn @click="newGame()" class="float-right">Reset (start a new game)</v-btn></h2>
       <div>
-        <div v-if="!$store.state.concept.length">No concept defined.</div>
+        <div v-if="!concept.length">No concept defined.</div>
         <v-container v-else>
           <v-row justify="start">
-            <v-col v-for="(subConcept, index) in $store.state.concept" :key="index" class="subConcept">
-              <sub-concept :iconKeys="subConcept" :index="index" @add="add($event, index)" @remove="remove($event, index)" />
+            <v-col v-for="(subConcept, index) in concept" :key="index" class="subConcept">
+              <sub-concept :iconKeys="subConcept" :index="index" @update="update($event, index)" />
             </v-col>
           </v-row>
         </v-container>
@@ -48,48 +48,50 @@
             hide-details
           />
         </div>
-        <div class="iconRow">
-          <div v-if="filteredConceptIds.length === 0">No icons matching the query</div>
-          <div
-            v-for="key in Object.keys(concepts)"
-            v-show="filteredConceptIds.includes(key)"
-            :key="key"
-            class="icon"
-          >
-            <icon
-              :icon-key="key"
-            />
-            <v-menu offset-y full-width>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  icon
-                  absolute
-                  top
-                  right
-                  small
-                  color="primary"
-                  v-on="on"
-                >
-                  <v-icon>add_box</v-icon>
-                </v-btn>
-              </template>
-              <v-list dense>
-                <v-subheader>{{concepts[key].join(', ')}}</v-subheader>
-                <v-list-item
-                  v-for="option in contextOptions"
-                  :key="option.index"
-                  @click="add(key, option.index)"
-                  active-class=""
-                >
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{option.name}}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </div>
+        <div v-if="filteredConceptIds.length === 0">No icons matching the query</div>
+        <div v-else class="iconRow">
+          <draggable :sort="false">
+            <div
+              v-for="key in Object.keys(concepts)"
+              v-show="filteredConceptIds.includes(key)"
+              :key="key"
+              class="icon"
+            >
+              <icon
+                :icon-key="key"
+              />
+              <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    icon
+                    absolute
+                    top
+                    right
+                    small
+                    color="primary"
+                    v-on="on"
+                  >
+                    <v-icon>add_box</v-icon>
+                  </v-btn>
+                </template>
+                <v-list dense>
+                  <v-subheader>{{concepts[key].join(', ')}}</v-subheader>
+                  <v-list-item
+                    v-for="option in contextOptions"
+                    :key="option.index"
+                    @click="add(key, option.index)"
+                    active-class=""
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{option.name}}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </div>
+          </draggable>
         </div>
       </div>
     </div>
@@ -98,7 +100,9 @@
 
 <script>
 import concepts, { filters } from './util/game.js'
+import {addToSubConcept, removeFromSubConcept} from './util/subconcept.js'
 import { v4 as uuidv4 } from 'uuid';
+import Draggable from 'vuedraggable';
 
 import Icon from './Icon.vue'
 import SubConcept from './SubConcept'
@@ -107,7 +111,8 @@ export default {
   name: 'game',
   components: {
     SubConcept,
-    Icon
+    Icon,
+    Draggable
   },
   data() {
     return {
@@ -158,28 +163,23 @@ export default {
     ucFirst(value) {
       return value.charAt(0).toUpperCase() + value.slice(1)
     },
-    add(key, index) {
-      const concept = this.concept;
-      if (this.concept.length <= index) {
-        concept.push([key])
+    update(newSubConcept, index) {
+      const concept = this.concept
+      if (newSubConcept.length > 0) {
+        concept[index] = newSubConcept
       } else {
-        concept[index].push(key)
+        concept.splice(index, 1)
       }
-
       this.send(concept)
+    },
+    add(key, index) {
+      const newSubConcept = addToSubConcept(this.concept[index] || [], key)
+      this.update(newSubConcept, index)
       this.query = ''
     },
     remove(key, index) {
-      const concept = this.concept;
-      const iconIndex = concept[index].lastIndexOf(key)
-      if (iconIndex > -1) {
-        if (iconIndex === 0) {
-          concept.splice(index, 1)
-        } else {
-          concept[index].splice(iconIndex, 1)
-        }
-        this.send(concept)
-      }
+      const newSubConcept = removeFromSubConcept(this.concept[index] || [], key)
+      this.update(newSubConcept, index)
     },
     send(concept) {
       const stateId = uuidv4()
