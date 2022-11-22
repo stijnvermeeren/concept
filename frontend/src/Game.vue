@@ -50,7 +50,12 @@
         </div>
         <div v-if="filteredConceptIds.length === 0">No icons matching the query</div>
         <div v-else class="iconRow">
-          <draggable :sort="false" :group="{name: 'allIcons', pull: 'clone'}">
+          <draggable
+              :list="Object.keys(concepts)"
+              :sort="false"
+              :group="{name: 'allIcons', pull: 'clone', put: false}"
+              :clone="cloneIcon"
+          >
             <div
               v-for="key in Object.keys(concepts)"
               v-show="filteredConceptIds.includes(key)"
@@ -212,6 +217,9 @@ export default {
         })
       }
       this.needsSending = false
+    },
+    cloneIcon(key) {
+      return {key, count: 1}
     },
     newGame() {
       this.concept = [];

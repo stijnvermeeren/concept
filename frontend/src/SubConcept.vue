@@ -85,16 +85,12 @@
           return result;
         },
         set(value) {
-          console.log(value)
           let subConcept = []
           for (let {key, count} of value) {
             subConcept = subConcept.concat(Array(count).fill(key))
           }
           this.$emit('update', subConcept)
         }
-      },
-      myGame() {
-        return this.$store.getters.myGame
       },
       colorClass() {
         switch (this.index) {
