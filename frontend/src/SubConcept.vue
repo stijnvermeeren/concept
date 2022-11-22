@@ -1,9 +1,16 @@
 <template>
   <v-sheet :class="[colorClass, 'pa-1', 'ma-0']">
-    <draggable v-model="summarize" class="container">
+    <draggable
+        v-model="summarize"
+        class="container"
+        :group="{name: 'icons', put: ['icons', 'allIcons']}"
+    >
+      <div v-show="!summarize.length" slot="header" class="subConceptPlaceholder">
+        Drag an icon here to start a new <span class="nowrap">sub-concept</span>.
+      </div>
       <div
         v-for="{key, count}, iconIndex in summarize"
-        :key="iconIndex"
+        :key="key"
         :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
       >
         <div class="icon">
@@ -33,7 +40,7 @@
             <v-icon>remove_circle_outline</v-icon>
           </v-btn>
         </div>
-        <div :class="['pawns']">
+        <div class="pawns">
           <pawn
             v-for="(pawnType, index) in pawns(iconIndex, count)"
             :key="index"
@@ -78,11 +85,11 @@
           return result;
         },
         set(value) {
+          console.log(value)
           let subConcept = []
           for (let {key, count} of value) {
             subConcept = subConcept.concat(Array(count).fill(key))
           }
-          console.log(subConcept)
           this.$emit('update', subConcept)
         }
       },
@@ -137,6 +144,15 @@
     margin-right: 25px;
   }
 
+  .subConceptPlaceholder {
+    text-align: center;
+  }
+
+  .subConceptPlaceholder .nowrap {
+    display: inline;
+    hyphens: none;
+  }
+
   .icon {
     position: relative;
     padding-top: 12px;
@@ -156,6 +172,10 @@
 
   .mainIcon {
     font-weight: bold;
+  }
+
+  .pawns {
+    white-space: nowrap;
   }
 
 </style>

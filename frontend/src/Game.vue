@@ -10,7 +10,7 @@
         <div v-if="!concept.length">No concept defined.</div>
         <v-container v-else>
           <v-row justify="start">
-            <v-col v-for="(subConcept, index) in concept" :key="index" class="subConcept">
+            <v-col v-for="(subConcept, index) in conceptWithEmptySubConcept" :key="index" class="subConcept">
               <sub-concept :iconKeys="subConcept" :index="index" @update="update($event, index)" />
             </v-col>
           </v-row>
@@ -50,7 +50,7 @@
         </div>
         <div v-if="filteredConceptIds.length === 0">No icons matching the query</div>
         <div v-else class="iconRow">
-          <draggable :sort="false">
+          <draggable :sort="false" :group="{name: 'allIcons', pull: 'clone'}">
             <div
               v-for="key in Object.keys(concepts)"
               v-show="filteredConceptIds.includes(key)"
@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import concepts, { filters } from './util/game.js'
 import {addToSubConcept, removeFromSubConcept} from './util/subconcept.js'
 import { v4 as uuidv4 } from 'uuid';
@@ -117,11 +118,21 @@ export default {
   data() {
     return {
       filter: 0,
-      query: ''
+      query: '',
+      concept: _.cloneDeep(this.$store.state.concept),
+      needsSending: false
+    }
+  },
+  watch: {
+    storeConcept(newConcept) {
+      this.concept = _.cloneDeep(newConcept)
     }
   },
   computed: {
-    concept() {
+    conceptWithEmptySubConcept() {
+      return this.concept.concat([[]])
+    },
+    storeConcept() {
       return this.$store.state.concept;
     },
     concepts() {
@@ -164,13 +175,13 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1)
     },
     update(newSubConcept, index) {
-      const concept = this.concept
+      console.log("update", newSubConcept, index)
       if (newSubConcept.length > 0) {
-        concept[index] = newSubConcept
+        this.$set(this.concept, index, newSubConcept)
       } else {
-        concept.splice(index, 1)
+        this.concept.splice(index, 1)
       }
-      this.send(concept)
+      this.scheduleSend()
     },
     add(key, index) {
       const newSubConcept = addToSubConcept(this.concept[index] || [], key)
@@ -181,22 +192,30 @@ export default {
       const newSubConcept = removeFromSubConcept(this.concept[index] || [], key)
       this.update(newSubConcept, index)
     },
-    send(concept) {
-      const stateId = uuidv4()
-      this.$store.commit('waitForStateId', stateId)
-      this.$socket.sendObj({
-        message: 'sendmessage',
-        data: {
-          action: 'newState',
-          state: {
-            id: stateId,
-            concept: concept
+    scheduleSend() {
+      this.needsSending = true
+      this.$nextTick(this.send)
+    },
+    send() {
+      if (this.needsSending) {
+        const stateId = uuidv4()
+        this.$store.commit('waitForStateId', stateId)
+        this.$socket.sendObj({
+          message: 'sendmessage',
+          data: {
+            action: 'newState',
+            state: {
+              id: stateId,
+              concept: this.concept.filter(subConcept => subConcept.length)
+            }
           }
-        }
-      })
+        })
+      }
+      this.needsSending = false
     },
     newGame() {
-      this.send([]);
+      this.concept = [];
+      this.scheduleSend();
     }
   }
 }
