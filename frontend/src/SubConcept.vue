@@ -1,10 +1,10 @@
 <template>
-  <v-sheet :class="[colorClass]" :shaped="true" :elevation="5">
+  <v-sheet :class="[colorClass, 'pl-3', 'pr-3', 'pt-2', 'pb-2', 'mt-3', 'mb-3', 'ml-4', 'mr-4']" :shaped="true" :elevation="5">
     <draggable
         v-model="summarize"
         :group="{name: 'icons', put: ['icons', 'allIcons']}"
         handle=".icon"
-        class="subConceptContainer pl-3 pr-3 pt-2 pb-2"
+        class="subConceptContainer"
     >
       <div v-show="!summarize.length" slot="header" class="subConceptPlaceholder">
         Drag an icon here to start a new <span class="nowrap">sub-concept</span>.
