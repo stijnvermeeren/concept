@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import _ from "lodash";
+import {addToSubConcept, removeFromSubConcept} from "@/util/subconcept";
+import {v4 as uuidv4} from "uuid";
 
 Vue.use(Vuex);
 
@@ -12,17 +15,16 @@ export default new Vuex.Store({
     inGame: false,
     requestedGameId: undefined,
     waitForStateId: undefined,
-    concept: []
+    concept: [],
+    localConcept: [],
+    needsSending: false
   },
   getters: {
-    myGame: state => {
-      return state.gameId && state.requestedGameId === state.gameId
-    },
     isWaiting: state => {
       return !!state.waitForStateId
     }
   },
-  mutations:{
+  mutations: {
     SOCKET_ONOPEN (state, event)  {
       Vue.prototype.$socket = event.currentTarget
       state.socket.isConnected = true
@@ -56,6 +58,10 @@ export default new Vuex.Store({
     waitForStateId(state, stateId) {
       state.waitForStateId = stateId
     },
+    setLocalConcept(state, concept) {
+      state.localConcept = _.cloneDeep(concept)
+      state.needsSending = true
+    },
     newMessage(state, { data }) {
       if (data.action === 'newState') {
         state.inGame = true;
@@ -63,10 +69,55 @@ export default new Vuex.Store({
           state.waitForStateId = undefined
         }
         state.concept = data.state.concept
+        state.localConcept = _.cloneDeep(state.concept)
       }
     },
     joinGame() {
       this.state.inGame = true;
+    }
+  },
+  actions: {
+    update({ commit, state, dispatch }, {newSubConcept, index}) {
+      const newConcept = state.localConcept
+      if (newSubConcept.length > 0) {
+        newConcept[index] = newSubConcept
+      } else {
+        newConcept.splice(index, 1)
+      }
+      commit('setLocalConcept', newConcept)
+      dispatch('send')
+    },
+    add({state, dispatch}, {key, index}) {
+      const newSubConcept = addToSubConcept(state.localConcept[index] || [], key)
+      dispatch('update', {newSubConcept, index})
+    },
+    remove({state, dispatch}, {key, index}) {
+      const newSubConcept = removeFromSubConcept(state.localConcept[index] || [], key)
+      dispatch('update', {newSubConcept, index})
+    },
+    send({ state, commit }) {
+      // Avoid sending two messages through the websocket when dragging an icon from one sub-concept to another.
+      Vue.nextTick(() => {
+        if (state.needsSending) {
+          const stateId = uuidv4()
+          commit('waitForStateId', stateId)
+          Vue.prototype.$socket.sendObj({
+            message: 'sendmessage',
+            data: {
+              action: 'newState',
+              state: {
+                id: stateId,
+                concept: state.localConcept.filter(subConcept => subConcept.length)
+              }
+            }
+          })
+        }
+        state.needsSending = false
+      })
+    },
+    newGame({commit, dispatch}) {
+      commit('setLocalConcept', [])
+      dispatch('send')
     }
   }
 })

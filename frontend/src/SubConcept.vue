@@ -1,29 +1,33 @@
 <template>
   <v-sheet :class="[colorClass, 'pl-3', 'pr-3', 'pt-2', 'pb-2', 'mt-3', 'mb-3', 'ml-4', 'mr-4']" :shaped="true" :elevation="5">
-    <draggable
-        v-model="summarize"
-        :group="{name: 'icons', put: ['icons', 'allIcons']}"
-        handle=".icon"
-        class="subConceptContainer"
-    >
-      <div v-show="!summarize.length" slot="header" class="subConceptPlaceholder">
-        Drag an icon here to start a new <span class="nowrap">sub-concept</span>.
-      </div>
-      <div
-        v-for="{key, count}, iconIndex in summarize"
-        :key="key"
-        :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
-      >
-        <sub-concept-icon
-          :icon-key="key"
-          :count="count"
-          :is-main-icon="iconIndex === 0"
-          :is-main-concept="index === 0"
-          @add="add(key)"
-          @remove="remove(key)"
-        />
-      </div>
-    </draggable>
+    <v-container>
+      <v-row>
+        <draggable
+            v-model="summarize"
+            :group="{name: 'icons', put: ['icons', 'allIcons']}"
+            handle=".icon"
+            class="subConceptContainer"
+        >
+          <v-col v-show="!summarize.length" slot="header" class="subConceptPlaceholder" align-self="center">
+            Drag an icon here to start a new <span class="nowrap">sub-concept</span>.
+          </v-col>
+          <v-col
+              v-for="{key, count}, iconIndex in summarize"
+              :key="key"
+              :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
+          >
+            <sub-concept-icon
+                :icon-key="key"
+                :count="count"
+                :is-main-icon="iconIndex === 0"
+                :is-main-concept="index === 0"
+                @add="add(key)"
+                @remove="remove(key)"
+            />
+          </v-col>
+        </draggable>
+      </v-row>
+    </v-container>
   </v-sheet>
 </template>
 
@@ -94,10 +98,6 @@
 </script>
 
 <style scoped>
-  .subConceptContainer {
-    display: flex;
-  }
-
   .subConceptItem {
     display: flex;
     align-items: center;

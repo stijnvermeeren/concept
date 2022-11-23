@@ -1,8 +1,10 @@
 <template>
   <v-app>
-    <v-main>
-      <v-container fluid>
+    <v-main app>
+      <all-icons-panel :concept="$store.state.concept" />
+      <v-container>
         <div :class="{waiting: isWaiting}">
+          <v-btn @click="$store.dispatch('newGame')" class="float-right">Reset (start a new game)</v-btn>
           <h1>Concept: online version</h1>
           <div v-if="inGame">
             <game></game>
@@ -13,16 +15,27 @@
         </div>
       </v-container>
     </v-main>
+    <v-footer app>
+      <v-row justify="center" no-gutters>
+        <div v-if="$store.state.socket.isConnected" class="connected">Connected</div>
+        <div v-else class="disconnected">Disconnected</div>
+        <div class="ml-6">
+          Source code and more information on <a href="https://github.com/stijnvermeeren/concept">Github</a>.
+        </div>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
 import Game from './Game'
+import AllIconsPanel from "@/AllIconsPanel";
 
 export default {
   name: 'app',
   components: {
-    Game
+    Game,
+    AllIconsPanel
   },
   computed: {
     inGame() {
@@ -43,5 +56,12 @@ export default {
 <style>
   .waiting * {
     cursor: progress;
+  }
+
+  .connected {
+    color: darkgreen;
+  }
+  .disconnected {
+    color: darkred;
   }
 </style>
