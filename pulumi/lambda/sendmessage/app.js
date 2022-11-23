@@ -18,11 +18,11 @@ exports.handler = async (event, context) => {
 
   console.log("Received request", requestData)
 
-  if (requestData.action === 'getGameState') {
+  if (requestData.action === 'connectToGame') {
     const gameStateResponse = await ddb.getItem({
       TableName: gamesTable,
       Key: { "id": {
-          S: "default"
+          S: requestData.gameId
         }},
       ProjectionExpression: 'game_state' }
     ).promise();
@@ -45,6 +45,13 @@ exports.handler = async (event, context) => {
       }
     });
 
+    await ddb.putItem({
+      TableName: connectionsTable,
+      Item: {
+        "id": { S: event.requestContext.connectionId },
+        "game_id": { S: requestData.gameId }
+      }
+    }).promise();
 
     try {
       await apigwManagementApi.postToConnection({ ConnectionId: event.requestContext.connectionId, Data: postData }).promise();
@@ -60,7 +67,7 @@ exports.handler = async (event, context) => {
   let connectionData;
 
   try {
-    connectionData = await ddb.scan({ TableName: connectionsTable, ProjectionExpression: 'connectionId' }).promise();
+    connectionData = await ddb.scan({ TableName: connectionsTable, ProjectionExpression: 'id' }).promise();
   } catch (e) {
     return { statusCode: 500, body: e.stack };
   }
@@ -68,7 +75,7 @@ exports.handler = async (event, context) => {
   await ddb.putItem({
     TableName: gamesTable,
     Item: {
-      "id": { S: 'default' },
+      "id": { S: requestData.gameId },
       "game_state": { S: JSON.stringify(requestData.state) }
     }
   }).promise();
@@ -82,8 +89,8 @@ exports.handler = async (event, context) => {
   });
 
 
-  const postCalls = connectionData.Items.map(async ({ connectionId }) => {
-    connectionId = connectionId.S;
+  const postCalls = connectionData.Items.map(async ({ id }) => {
+    const connectionId = id.S;
     console.log("connection", connectionId)
     try {
       await apigwManagementApi.postToConnection({ ConnectionId: connectionId, Data: postData }).promise();

@@ -11,7 +11,7 @@ exports.handler = function (event, context, callback) {
   var deleteParams = {
     TableName: connectionsTable,
     Key: {
-      connectionId: { S: event.requestContext.connectionId }
+      id: { S: event.requestContext.connectionId }
     }
   };
 

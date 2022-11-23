@@ -13,7 +13,7 @@ export default new Vuex.Store({
       reconnectError: false,
     },
     inGame: false,
-    requestedGameId: undefined,
+    gameId: 'test',
     waitForStateId: undefined,
     concept: [],
     localConcept: [],
@@ -31,7 +31,8 @@ export default new Vuex.Store({
       Vue.prototype.$socket.sendObj({
         message: 'sendmessage',
         data: {
-          action: 'getGameState'
+          action: 'connectToGame',
+          gameId: state.gameId
         }
       })
     },
@@ -51,9 +52,6 @@ export default new Vuex.Store({
     },
     SOCKET_RECONNECT_ERROR(state) {
       state.socket.reconnectError = true;
-    },
-    requestGameId(state, gameId) {
-      state.requestedGameId = gameId
     },
     waitForStateId(state, stateId) {
       state.waitForStateId = stateId
@@ -105,6 +103,7 @@ export default new Vuex.Store({
             message: 'sendmessage',
             data: {
               action: 'newState',
+              gameId: state.gameId,
               state: {
                 id: stateId,
                 concept: state.localConcept.filter(subConcept => subConcept.length)

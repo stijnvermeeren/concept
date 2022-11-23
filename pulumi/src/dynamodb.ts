@@ -3,11 +3,16 @@ import * as aws from "@pulumi/aws";
 export const connectionsTable = new aws.dynamodb.Table("concept_connections", {
     attributes: [
         {
-            name: "connectionId",
+            name: "id",
+            type: "S"
+        },
+        {
+            name: "game_id",
             type: "S"
         }
     ],
-    hashKey: "connectionId",
+    hashKey: "game_id",
+    rangeKey: "id",
     billingMode: "PAY_PER_REQUEST"
 });
 
