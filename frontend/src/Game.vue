@@ -40,7 +40,7 @@
         <div>
           <v-text-field
             v-model="query"
-            label="Filter concepts by query"
+            label="Search concepts by query"
             placeholder="Query"
             filled
             clearable
@@ -52,8 +52,8 @@
         <div v-else class="iconRow">
           <draggable
               :list="Object.keys(concepts)"
-              :sort="false"
               :group="{name: 'allIcons', pull: 'clone', put: false}"
+              :sort="false"
               :clone="cloneIcon"
           >
             <div
@@ -76,7 +76,7 @@
                     color="primary"
                     v-on="on"
                   >
-                    <v-icon>add_box</v-icon>
+                    <v-icon>mdi-plus-box</v-icon>
                   </v-btn>
                 </template>
                 <v-list dense>
@@ -180,7 +180,6 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1)
     },
     update(newSubConcept, index) {
-      console.log("update", newSubConcept, index)
       if (newSubConcept.length > 0) {
         this.$set(this.concept, index, newSubConcept)
       } else {
@@ -242,6 +241,7 @@ export default {
     position: relative;
     padding-top: 12px;
     padding-right: 12px;
+    cursor: move;
   }
 
   .iconRow {

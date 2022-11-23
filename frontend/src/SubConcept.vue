@@ -1,9 +1,10 @@
 <template>
-  <v-sheet :class="[colorClass, 'pa-1', 'ma-0']">
+  <v-sheet :class="[colorClass]" :shaped="true" :elevation="5">
     <draggable
         v-model="summarize"
-        class="container"
         :group="{name: 'icons', put: ['icons', 'allIcons']}"
+        handle=".icon"
+        class="subConceptContainer pl-3 pr-3 pt-2 pb-2"
     >
       <div v-show="!summarize.length" slot="header" class="subConceptPlaceholder">
         Drag an icon here to start a new <span class="nowrap">sub-concept</span>.
@@ -13,40 +14,14 @@
         :key="key"
         :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
       >
-        <div class="icon">
-          <icon :icon-key="key" />
-          <v-btn
-            @click="add(key)"
-            title="Add another marker"
-            icon
-            small
-            absolute
-            top
-            right
-            color="primary"
-          >
-            <v-icon>add_box</v-icon>
-          </v-btn>
-          <v-btn
-            title="Remove marker"
-            @click="remove(key)"
-            icon
-            small
-            absolute
-            top
-            left
-            color="primary"
-          >
-            <v-icon>remove_circle_outline</v-icon>
-          </v-btn>
-        </div>
-        <div class="pawns">
-          <pawn
-            v-for="(pawnType, index) in pawns(iconIndex, count)"
-            :key="index"
-            :type="pawnType"
-          />
-        </div>
+        <sub-concept-icon
+          :icon-key="key"
+          :count="count"
+          :is-main-icon="iconIndex === 0"
+          :is-main-concept="index === 0"
+          @add="add(key)"
+          @remove="remove(key)"
+        />
       </div>
     </draggable>
   </v-sheet>
@@ -55,15 +30,13 @@
 <script>
   import {addToSubConcept, removeFromSubConcept} from './util/subconcept.js'
 
-  import Icon from './Icon.vue'
-  import Pawn from './Pawn.vue'
+  import SubConceptIcon from './SubConceptIcon.vue'
   import Draggable from "vuedraggable";
 
   export default {
     name: 'SubConcept',
     components: {
-      Icon,
-      Pawn,
+      SubConceptIcon,
       Draggable
     },
     props: ['index', 'iconKeys'],
@@ -95,15 +68,17 @@
       colorClass() {
         switch (this.index) {
           case 0:
-            return 'green lighten-3'
+            return 'green lighten-4'
           case 1:
-            return 'blue lighten-3'
+            return 'blue lighten-4'
           case 2:
-            return 'red lighten-3'
+            return 'red lighten-4'
           case 3:
-            return 'deep-orange lighten-3'
+            return 'deep-orange lighten-4'
+          case 4:
+            return 'amber lighten-4'
           default:
-            return 'blue-grey lighten-3'
+            return 'blue-grey lighten-4'
         }
       }
     },
@@ -113,24 +88,13 @@
       },
       remove(key) {
         this.$emit('update', removeFromSubConcept(this.iconKeys, key))
-      },
-      pawns(iconIndex, count) {
-        const pawns = Array(count).fill('pawn')
-        if (iconIndex === 0) {
-          if (this.index === 0) {
-            pawns[0] = 'question'
-          } else {
-            pawns[0] = 'exclamation'
-          }
-        }
-        return pawns
       }
     }
   }
 </script>
 
 <style scoped>
-  .container {
+  .subConceptContainer {
     display: flex;
   }
 
@@ -149,29 +113,8 @@
     hyphens: none;
   }
 
-  .icon {
-    position: relative;
-    padding-top: 12px;
-    padding-right: 12px;
-    padding-left: 12px;
-  }
-
-  .v-btn--absolute.v-btn--right {
-    right: 0;
-  }
-  .v-btn--absolute.v-btn--top {
-    top: 0;
-  }
-  .v-btn--absolute.v-btn--left {
-    left: 0;
-  }
-
   .mainIcon {
     font-weight: bold;
-  }
-
-  .pawns {
-    white-space: nowrap;
   }
 
 </style>

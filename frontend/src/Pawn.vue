@@ -1,5 +1,5 @@
 <template>
-  <span :class="type">{{symbol}}</span>
+  <span :class="[type, 'text--secondary']">{{symbol}}</span>
 </template>
 
 <script>
@@ -23,14 +23,14 @@
 
 <style scoped>
   .question {
-    font-size: 64px;
+    font-size: 48px;
   }
 
   .exclamation {
-    font-size: 64px;
+    font-size: 48px;
   }
 
   .pawn {
-    font-size: 48px;
+    font-size: 36px;
   }
 </style>
