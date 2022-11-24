@@ -78,7 +78,8 @@ exports.handler = async (event, context) => {
         ':game_id' : {S: requestData.gameId}
       },
       KeyConditionExpression: 'game_id = :game_id',
-      TableName: connectionsTable
+      TableName: connectionsTable,
+      IndexName: "game_id_index"
     }).promise();
   } catch (e) {
     return { statusCode: 500, body: e.stack };
@@ -92,7 +93,7 @@ exports.handler = async (event, context) => {
     }
   });
 
-  const postCalls = connectionData.Items.map(async ({ id, game_id }) => {
+  const postCalls = connectionData.Items.map(async ({ id }) => {
     const connectionId = id.S;
     console.log(`Sending new game data to connection ${connectionId}`)
     try {
@@ -102,7 +103,7 @@ exports.handler = async (event, context) => {
         console.log(`Found stale connection, deleting ${connectionId}`);
         return await ddb.deleteItem({
           TableName: connectionsTable,
-          Key: { "id" : { S: connectionId }, game_id }
+          Key: { "id" : { S: connectionId } }
         }).promise();
       } else {
         throw e;

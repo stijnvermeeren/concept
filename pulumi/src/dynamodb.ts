@@ -11,8 +11,14 @@ export const connectionsTable = new aws.dynamodb.Table("concept_connections", {
             type: "S"
         }
     ],
-    hashKey: "game_id",
-    rangeKey: "id",
+    hashKey: "id",
+    globalSecondaryIndexes: [
+        {
+            name: "game_id_index",
+            hashKey: "game_id",
+            projectionType: "KEYS_ONLY"
+        }
+    ],
     billingMode: "PAY_PER_REQUEST"
 });
 

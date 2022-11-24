@@ -1,24 +1,26 @@
 // Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-var AWS = require("aws-sdk");
+const AWS = require("aws-sdk");
 AWS.config.update({ region: process.env.AWS_REGION });
-var DDB = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
+const DDB = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
 
 const connectionsTable = process.env.CONNECTIONS_TABLE
 
-exports.handler = function (event, context, callback) {
-  var deleteParams = {
+exports.handler = async function (event, context, callback) {
+  const deleteParams = {
     TableName: connectionsTable,
     Key: {
       id: { S: event.requestContext.connectionId }
     }
   };
 
-  DDB.deleteItem(deleteParams, function (err) {
-    callback(null, {
-      statusCode: err ? 500 : 200,
-      body: err ? "Failed to disconnect: " + JSON.stringify(err) : "Disconnected."
-    });
-  });
+  try {
+    await DDB.deleteItem(deleteParams).promise();
+  } catch (e) {
+    console.log("Error while disconnecting.", e)
+    return { statusCode: 500, body: e.stack };
+  }
+
+  return { statusCode: 200, body: 'Disconnected.' };
 };

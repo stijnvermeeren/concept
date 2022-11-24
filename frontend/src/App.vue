@@ -2,16 +2,18 @@
   <v-app>
     <v-main app>
       <all-icons-panel :concept="$store.state.concept" />
-      <v-container>
-        <div :class="{waiting: isWaiting}">
-          <v-btn @click="$store.dispatch('newGame')" class="float-right">Reset (start a new game)</v-btn>
-          <h1>Concept: online version</h1>
-          <div v-if="inGame">
-            <game></game>
+      <v-container :class="{waiting: isWaiting}">
+        <h1>Concept: online version</h1>
+        <div v-if="gameId">
+          <div>
+            Invite others to this game with this URL:
+            <v-chip @click="copyUrl" label><v-icon left>mdi-content-copy</v-icon> {{url}}</v-chip>
           </div>
-          <div v-else>
-            Loading...
-          </div>
+          <game></game>
+          <v-btn @click="$store.dispatch('newGame')">Reset (start a new game)</v-btn>
+        </div>
+        <div v-else>
+          Loading...
         </div>
       </v-container>
     </v-main>
@@ -38,16 +40,19 @@ export default {
     AllIconsPanel
   },
   computed: {
-    inGame() {
-      return this.$store.state.inGame
-    },
     isWaiting() {
       return this.$store.getters.isWaiting;
+    },
+    url() {
+      return window.location.href;
+    },
+    gameId() {
+      return this.$store.state.gameId;
     }
   },
   methods: {
-    joinGame() {
-      this.$store.commit('joinGame')
+    copyUrl() {
+      navigator.clipboard.writeText(this.url)
     }
   }
 }

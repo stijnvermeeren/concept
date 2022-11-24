@@ -12,8 +12,7 @@ export default new Vuex.Store({
       isConnected: false,
       reconnectError: false,
     },
-    inGame: false,
-    gameId: window.location.search.substring(1) || "",
+    gameId: window.location.search.substring(1) || undefined,
     waitForStateId: undefined,
     concept: [],
     localConcept: [],
@@ -65,16 +64,12 @@ export default new Vuex.Store({
     },
     newMessage(state, { data }) {
       if (data.action === 'newState') {
-        state.inGame = true;
         if (state.waitForStateId === data.state.id) {
           state.waitForStateId = undefined
         }
         state.concept = data.state.concept
         state.localConcept = _.cloneDeep(state.concept)
       }
-    },
-    joinGame() {
-      this.state.inGame = true;
     }
   },
   actions: {

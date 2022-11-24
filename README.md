@@ -11,8 +11,9 @@ This project can serve as a demonstration for how to use the following technolog
 
 ## Credits
 - Game concept by [Repos Production](https://rprod.com/).
-- Code written by Stijn Vermeeren.
+- Code written by [Stijn Vermeeren](https://stijnvermeeren.be/).
 - Icons by Melina Found.
+- The setup for using Websockets with API Gateway and Lambda on AWS is inspired by the [AWS Developer Guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api.html).
 
 ## Deployment to AWS using Pulumi
 
