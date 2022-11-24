@@ -1,6 +1,6 @@
 # Concept
 
-An implementation for playing the game of [Concept](https://concept-the-game.com/) by Repos Productions online. Different players can connect to the same game and can follow the concept that is being defined in real-time. Currently, the implementation does not support playing multiple games at the same time.
+An implementation for playing the game of [Concept](https://concept-the-game.com/) by Repos Productions online. Different players can connect to the same game and can follow the concept that is being defined in real-time. Different games can be played at the same time, each accessed through a unique URL. 
 
 ## Demo
 
