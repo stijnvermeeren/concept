@@ -1,15 +1,13 @@
 <template>
-  <v-container>
-    <v-row justify="start">
-      <v-col v-for="(subConcept, index) in conceptWithEmptySubConcept" :key="index" class="subConcept">
-        <sub-concept
-            :iconKeys="subConcept"
-            :index="index"
-            @update="$store.dispatch('update', {newSubConcept: $event, index})"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="gameContainer">
+    <div v-for="(subConcept, index) in conceptWithEmptySubConcept" :key="index" class="subConcept">
+      <sub-concept
+          :iconKeys="subConcept"
+          :index="index"
+          @update="$store.dispatch('update', {newSubConcept: $event, index})"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -30,3 +28,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .gameContainer {
+  }
+
+  .gameContainer > div {
+    vertical-align: top;
+    display: inline-block;
+  }
+</style>

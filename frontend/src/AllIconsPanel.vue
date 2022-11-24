@@ -74,7 +74,7 @@
           <v-list-item
               v-for="option in contextOptions"
               :key="option.index"
-              @click="$store.dispatch('add', {key: key, index: option.index})"
+              @click="add(key, option.index)"
               class="iconContextMenu"
               dense
           >
@@ -102,7 +102,6 @@ export default {
     Icon,
     Draggable
   },
-  props: ['concept'],
   data() {
     return {
       filter: 0,
@@ -110,6 +109,9 @@ export default {
     }
   },
   computed: {
+    concept() {
+      return this.$store.state.localConcept
+    },
     filters() {
       return filters
     },
@@ -145,6 +147,10 @@ export default {
     },
     cloneIcon(key) {
       return {key, count: 1}
+    },
+    add(key, index) {
+      this.query = ''
+      this.$store.dispatch('add', {key, index})
     }
   }
 }

@@ -1,17 +1,19 @@
 <template>
   <v-app :class="{waiting: isWaiting}">
     <v-main app>
-      <all-icons-panel :concept="$store.state.concept" />
+      <all-icons-panel />
       <v-container>
         <h1>Concept: online version</h1>
-        <div v-if="gameId">
-          <div>
+        <template v-if="gameId">
+          <div class="mb-6">
             Invite others to this game with this URL:
             <v-chip @click="copyUrl" label><v-icon left>mdi-content-copy</v-icon> {{url}}</v-chip>
           </div>
           <game></game>
-          <v-btn @click="$store.dispatch('newGame')">Reset (start a new game)</v-btn>
-        </div>
+          <div class="mt-6">
+            <v-btn @click="$store.dispatch('newGame')">Reset (start a new game)</v-btn>
+          </div>
+        </template>
         <div v-else>
           Loading...
         </div>
