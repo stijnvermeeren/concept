@@ -2,11 +2,11 @@
   <v-sheet :class="['sheet', colorClass, 'pl-3', 'pr-3', 'pt-2', 'pb-2', 'mt-3', 'mb-3', 'ml-4', 'mr-4']" :shaped="true" :elevation="5">
     <v-container>
       <draggable
-          tag="div"
           v-model="summarize"
           :group="{name: 'icons', put: ['icons', 'allIcons']}"
           handle=".icon"
           class="subConceptContainer row"
+          ghostClass="ghost"
       >
         <v-col v-show="!summarize.length" slot="header" class="subConceptPlaceholder">
           Drag an icon here to start a new sub‑concept.

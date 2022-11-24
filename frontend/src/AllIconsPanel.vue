@@ -48,44 +48,43 @@
       </v-list-item>
     </v-list>
     <v-list v-else>
-      <draggable
-          :list="Object.keys(concepts)"
-          :group="{name: 'allIcons', pull: 'clone', put: false}"
-          :sort="false"
-          :clone="cloneIcon"
-          handle=".icon"
+      <v-list-group
+          v-for="key in Object.keys(concepts)"
+          v-show="filteredConceptIds.includes(key)"
+          :key="key"
       >
-        <v-list-group
-            v-for="key in Object.keys(concepts)"
-            v-show="filteredConceptIds.includes(key)"
-            :key="key"
-        >
 
-          <v-list-item slot="activator">
+        <v-list-item slot="activator">
+          <draggable
+              :list="[key]"
+              :group="{name: 'allIcons', pull: 'clone', put: false}"
+              :sort="false"
+              :clone="cloneIcon"
+          >
             <v-list-item-icon class="icon mt-0 mb-0">
               <icon :icon-key="key"/>
             </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ concepts[key].join(', ') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item
-              v-for="option in contextOptions"
-              :key="option.index"
-              @click="add(key, option.index)"
-              class="iconContextMenu"
-              dense
-          >
-            <v-list-item-content>
-              <v-list-item-title class="text-body-2">
-                {{option.name}}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-group>
-      </draggable>
+          </draggable>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ concepts[key].join(', ') }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+            v-for="option in contextOptions"
+            :key="option.index"
+            @click="add(key, option.index)"
+            class="iconContextMenu"
+            dense
+        >
+          <v-list-item-content>
+            <v-list-item-title class="text-body-2">
+              {{option.name}}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -163,5 +162,9 @@ export default {
 
   .iconContextMenu {
     margin-left: 110px;
+  }
+
+  .ghost {
+    display: none;
   }
 </style>

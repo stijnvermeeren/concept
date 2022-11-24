@@ -5,10 +5,12 @@
       <v-container>
         <h1>Concept: online version</h1>
         <template v-if="gameId">
-          <div class="mb-6">
-            Invite others to this game with this URL:
-            <v-chip @click="copyUrl" label><v-icon left>mdi-content-copy</v-icon> {{url}}</v-chip>
-          </div>
+          <v-card flat>
+            <v-card-text>
+              Invite others to this game with this URL:
+              <v-chip @click="copyUrl" label><v-icon left>mdi-content-copy</v-icon> {{url}}</v-chip>
+            </v-card-text>
+          </v-card>
           <game></game>
           <div class="mt-6">
             <v-btn @click="$store.dispatch('newGame')">Reset (start a new game)</v-btn>
