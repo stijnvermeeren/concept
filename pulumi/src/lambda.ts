@@ -8,8 +8,8 @@ const lambdaRole = new aws.iam.Role("lambdaRole", {
 });
 
 const lambdaRolePolicyDocument = pulumi
-    .all([connectionsTable.arn, gamesTable.arn, apiGateway.arn])
-    .apply(([connectionsTableArn, gamesTableArn, apiGatewayArn]) => {
+    .all([connectionsTable.arn, gamesTable.arn, apiGateway.executionArn])
+    .apply(([connectionsTableArn, gamesTableArn, apiGatewayExecutionArn]) => {
         return aws.iam.getPolicyDocument({
             statements: [
                 {
@@ -28,6 +28,7 @@ const lambdaRolePolicyDocument = pulumi
                     ],
                     resources: [
                         connectionsTableArn,
+                        `${connectionsTableArn}/index/*`,
                         gamesTableArn
                     ]
                 },
@@ -37,7 +38,7 @@ const lambdaRolePolicyDocument = pulumi
                         "execute-api:ManageConnections"
                     ],
                     resources: [
-                        "*" /* TODO restrict */
+                        `${apiGatewayExecutionArn}/*`
                     ]
                 }
             ],
@@ -58,12 +59,7 @@ export const onConnectFunction = new aws.lambda.Function("onConnectFunction", {
     role: lambdaRole.arn,
     handler: "app.handler",
     runtime: "nodejs14.x",
-    code: new pulumi.asset.FileArchive("lambda/onconnect"),
-    environment: {
-        variables: {
-            CONNECTIONS_TABLE: connectionsTable.name,
-        },
-    }
+    code: new pulumi.asset.FileArchive("lambda/onconnect")
 });
 export const sendMessageFunction = new aws.lambda.Function("sendMessageFunction", {
     role: lambdaRole.arn,

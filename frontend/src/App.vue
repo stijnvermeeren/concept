@@ -1,8 +1,8 @@
 <template>
-  <v-app>
+  <v-app :class="{waiting: isWaiting}">
     <v-main app>
       <all-icons-panel :concept="$store.state.concept" />
-      <v-container :class="{waiting: isWaiting}">
+      <v-container>
         <h1>Concept: online version</h1>
         <div v-if="gameId">
           <div>
@@ -32,6 +32,7 @@
 <script>
 import Game from './Game'
 import AllIconsPanel from "@/AllIconsPanel";
+import {v4 as uuidv4} from "uuid";
 
 export default {
   name: 'app',
@@ -53,6 +54,15 @@ export default {
   methods: {
     copyUrl() {
       navigator.clipboard.writeText(this.url)
+    }
+  },
+  created() {
+    console.log()
+    if (!window.location.search.substring(1)) {
+      const gameId = uuidv4()
+      const url = `${window.location.origin}${window.location.pathname}?${gameId}`
+      console.log(url)
+      window.location.replace(url)
     }
   }
 }

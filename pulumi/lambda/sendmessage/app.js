@@ -27,7 +27,7 @@ exports.handler = async (event, context) => {
       ProjectionExpression: 'game_state' }
     ).promise();
 
-    var gameState = {
+    let gameState = {
       id: null,
       concept: []
     }
@@ -56,8 +56,8 @@ exports.handler = async (event, context) => {
     try {
       await apigwManagementApi.postToConnection({ ConnectionId: event.requestContext.connectionId, Data: postData }).promise();
     } catch(error) {
-      console.log("Error when sending game state", error);
-      return { statusCode: 200, body: error };
+      console.log(`Error when sending game state to connection ${event.requestContext.connectionId}`, error);
+      return { statusCode: 500, body: error };
     }
 
     return { statusCode: 200, body: 'Data sent.' };
@@ -79,9 +79,11 @@ exports.handler = async (event, context) => {
       },
       KeyConditionExpression: 'game_id = :game_id',
       TableName: connectionsTable,
-      IndexName: "game_id_index"
+      IndexName: "game_id_index",
+      ProjectionExpression: "id"
     }).promise();
   } catch (e) {
+    console.log(`Error finding connections for game ${requestData.gameId}`, e)
     return { statusCode: 500, body: e.stack };
   }
 

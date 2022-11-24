@@ -12,7 +12,7 @@ export default new Vuex.Store({
       isConnected: false,
       reconnectError: false,
     },
-    gameId: window.location.search.substring(1) || undefined,
+    gameId: window.location.search.substring(1),
     waitForStateId: undefined,
     concept: [],
     localConcept: [],

@@ -51,3 +51,10 @@ const apiGatewayStage = new aws.apigatewayv2.Stage("concept", {
 });
 
 export const websocket_url = apiGatewayStage.invokeUrl;
+
+
+export const arn = apiGateway.arn
+export const executionArn = apiGateway.executionArn
+export const credentialsArn = apiGateway.credentialsArn
+export const stageArn = apiGatewayStage.arn
+export const stageExecutionArn = apiGatewayStage.arn

@@ -1,7 +1,11 @@
 # Concept
 
 An implementation for playing the game of [Concept](https://concept-the-game.com/) by Repos Productions online. Different players can connect to the same game and can follow the concept that is being defined in real-time. Currently, the implementation does not support playing multiple games at the same time.
- 
+
+## Demo
+
+Available at [concept.stijnvermeeren.be](https://concept.stijnvermeeren.be/).
+
 ## Technology
 This project can serve as a demonstration for how to use the following technologies:
 - A [Vue.js](https://vuejs.org/) frontend with the [Vuetify](https://vuetifyjs.com/) Material Design Framework and drag-and-drop support using [SortableJS (Vue.Draggable)](https://github.com/SortableJS/Vue.Draggable/).
@@ -10,7 +14,7 @@ This project can serve as a demonstration for how to use the following technolog
 - Frontend-backend communication using *websockets*.
 
 ## Credits
-- Game concept by [Repos Production](https://rprod.com/).
+- Game concept by [Repos Production](https://rprod.com/). Do buy a physical copy of the original game if you like it!
 - Code written by [Stijn Vermeeren](https://stijnvermeeren.be/).
 - Icons by Melina Found.
 - The setup for using Websockets with API Gateway and Lambda on AWS is inspired by the [AWS Developer Guide](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api.html).
