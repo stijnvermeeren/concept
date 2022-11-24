@@ -13,7 +13,7 @@ export default new Vuex.Store({
       reconnectError: false,
     },
     inGame: false,
-    gameId: 'test',
+    gameId: window.location.search.substring(1) || "",
     waitForStateId: undefined,
     concept: [],
     localConcept: [],
@@ -52,6 +52,9 @@ export default new Vuex.Store({
     },
     SOCKET_RECONNECT_ERROR(state) {
       state.socket.reconnectError = true;
+    },
+    setGameId(state, gameId) {
+      state.gameId = gameId
     },
     waitForStateId(state, stateId) {
       state.waitForStateId = stateId

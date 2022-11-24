@@ -63,15 +63,6 @@ exports.handler = async (event, context) => {
     return { statusCode: 200, body: 'Data sent.' };
   }
 
-
-  let connectionData;
-
-  try {
-    connectionData = await ddb.scan({ TableName: connectionsTable, ProjectionExpression: 'id' }).promise();
-  } catch (e) {
-    return { statusCode: 500, body: e.stack };
-  }
-
   await ddb.putItem({
     TableName: gamesTable,
     Item: {
@@ -79,6 +70,19 @@ exports.handler = async (event, context) => {
       "game_state": { S: JSON.stringify(requestData.state) }
     }
   }).promise();
+
+  let connectionData
+  try {
+    connectionData = await ddb.query({
+      ExpressionAttributeValues: {
+        ':game_id' : {S: requestData.gameId}
+      },
+      KeyConditionExpression: 'game_id = :game_id',
+      TableName: connectionsTable
+    }).promise();
+  } catch (e) {
+    return { statusCode: 500, body: e.stack };
+  }
 
   const postData = JSON.stringify({
     mutation: 'newMessage',
@@ -88,16 +92,18 @@ exports.handler = async (event, context) => {
     }
   });
 
-
-  const postCalls = connectionData.Items.map(async ({ id }) => {
+  const postCalls = connectionData.Items.map(async ({ id, game_id }) => {
     const connectionId = id.S;
-    console.log("connection", connectionId)
+    console.log(`Sending new game data to connection ${connectionId}`)
     try {
-      await apigwManagementApi.postToConnection({ ConnectionId: connectionId, Data: postData }).promise();
+      return await apigwManagementApi.postToConnection({ ConnectionId: connectionId, Data: postData }).promise();
     } catch (e) {
       if (e.statusCode === 410) {
         console.log(`Found stale connection, deleting ${connectionId}`);
-        await ddb.delete({ TableName: connectionsTable, Key: { connectionId } }).promise();
+        return await ddb.deleteItem({
+          TableName: connectionsTable,
+          Key: { "id" : { S: connectionId }, game_id }
+        }).promise();
       } else {
         throw e;
       }
