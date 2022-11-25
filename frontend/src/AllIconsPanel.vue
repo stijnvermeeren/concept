@@ -5,6 +5,7 @@
       permanent
       width="550"
       right
+      touchless
   >
     <template v-slot:prepend>
       <v-card class="pa-3">
