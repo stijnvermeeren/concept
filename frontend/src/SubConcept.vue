@@ -11,6 +11,7 @@
           handle=".icon"
           class="subConceptContainer row"
           ghostClass="ghost"
+          filter=".v-btn"
       >
         <v-col v-show="!summarize.length" slot="header" class="subConceptPlaceholder">
           Drag an icon here to start a new sub‑concept.
