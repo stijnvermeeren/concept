@@ -11,9 +11,14 @@
               <v-chip @click="copyUrl" label><v-icon left>mdi-content-copy</v-icon> {{url}}</v-chip>
             </v-card-text>
           </v-card>
-          <game></game>
-          <div class="mt-6">
-            <v-btn @click="$store.dispatch('newGame')">Reset (start a new game)</v-btn>
+          <div v-if="isInitialised">
+            <game></game>
+            <div class="mt-6">
+              <v-btn @click="$store.dispatch('newGame')">Reset (start a new game)</v-btn>
+            </div>
+          </div>
+          <div v-else>
+            Loading game...
           </div>
         </template>
         <div v-else>
@@ -48,6 +53,9 @@ export default {
     isWaiting() {
       return this.$store.getters.isWaiting;
     },
+    isInitialised() {
+      return !this.$store.state.initialising;
+    },
     url() {
       return window.location.href;
     },
@@ -61,11 +69,9 @@ export default {
     }
   },
   created() {
-    console.log()
     if (!window.location.search.substring(1)) {
       const gameId = uuidv4()
       const url = `${window.location.origin}${window.location.pathname}?${gameId}`
-      console.log(url)
       window.location.replace(url)
     }
   }

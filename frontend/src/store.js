@@ -13,6 +13,7 @@ export default new Vuex.Store({
       reconnectError: false,
     },
     gameId: window.location.search.substring(1),
+    initialising: true,
     waitForStateId: undefined,
     concept: [],
     localConcept: [],
@@ -64,6 +65,7 @@ export default new Vuex.Store({
     },
     newMessage(state, { data }) {
       if (data.action === 'newState') {
+        state.initialising = false
         if (state.waitForStateId === data.state.id) {
           state.waitForStateId = undefined
         }

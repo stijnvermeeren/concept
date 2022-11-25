@@ -1,5 +1,9 @@
 <template>
-  <v-sheet :class="['sheet', colorClass, 'pl-3', 'pr-3', 'pt-2', 'pb-2', 'mt-3', 'mb-3', 'ml-4', 'mr-4']" :shaped="true" :elevation="5">
+  <v-sheet
+      :class="['sheet', colorClass, 'pl-3', 'pr-3', 'pt-2', 'pb-2', 'mt-3', 'mb-3', 'ml-4', 'mr-4']"
+      :shaped="true"
+      :elevation="5"
+  >
     <v-container>
       <draggable
           v-model="summarize"
@@ -16,6 +20,7 @@
             :key="key"
             :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
         >
+          <v-icon v-if="iconIndex === 0" class="insertBeforeGhost" color="secondary" large>mdi-chevron-down</v-icon>
           <sub-concept-icon
               :icon-key="key"
               :count="count"
@@ -24,6 +29,7 @@
               @add="add(key)"
               @remove="remove(key)"
           />
+          <v-icon class="insertGhost" color="secondary" large>mdi-chevron-down</v-icon>
         </v-col>
       </draggable>
     </v-container>
@@ -91,29 +97,64 @@
       },
       remove(key) {
         this.$emit('update', removeFromSubConcept(this.iconKeys, key))
+      },
+      onChange(evt) {
+        console.log(evt)
       }
     }
   }
 </script>
 
-<style scoped>
+<style lang="scss">
+  @import '~vuetify/src/styles/main.sass';
+
+  .sheet:has(.ghost) {
+    @extend .lighten-3;
+    @extend .elevation-15;
+  }
+</style>
+
+<style lang="scss" scoped>
   .sheet {
     min-height: 120px;
-  }
 
-  .subConceptItem {
-    flex: 0;
-    margin-right: 25px;
-  }
+    .subConceptItem {
+      flex: 0;
+      margin-right: 25px;
+      position: relative;
+    }
 
-  .subConceptPlaceholder {
-    max-width: 160px;
-    text-align: center;
-    hyphens: none;
-  }
+    .insertGhost, .insertBeforeGhost {
+      position: absolute;
+      top: -5px;
+      display: none;
+    }
 
-  .mainIcon {
-    font-weight: bold;
+    .insertGhost {
+      right: -25px;
+    }
+
+    .insertBeforeGhost {
+      left: -12px;
+    }
+
+    .subConceptItem:has(+ .ghost) .insertGhost {
+      display: block;
+    }
+
+    .ghost + .subConceptItem .insertBeforeGhost {
+      display: block;
+    }
+
+    .subConceptPlaceholder {
+      max-width: 160px;
+      text-align: center;
+      hyphens: none;
+    }
+
+    .mainIcon {
+      font-weight: bold;
+    }
   }
 
 </style>
