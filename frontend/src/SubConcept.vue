@@ -139,11 +139,11 @@
       left: -12px;
     }
 
-    .subConceptItem:has(+ .ghost) .insertGhost {
+    .subConceptItem:has(+ .ghost.allIconsPanelIcon) .insertGhost {
       display: block;
     }
 
-    .ghost + .subConceptItem .insertBeforeGhost {
+    .ghost.allIconsPanelIcons + .subConceptItem .insertBeforeGhost {
       display: block;
     }
 

@@ -62,7 +62,7 @@
               :sort="false"
               :clone="cloneIcon"
           >
-            <v-list-item-icon class="icon mt-0 mb-0">
+            <v-list-item-icon class="allIconsPanelIcon icon mt-0 mb-0">
               <icon :icon-key="key"/>
             </v-list-item-icon>
           </draggable>
