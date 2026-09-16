@@ -2,7 +2,7 @@
   <v-navigation-drawer
       :class="['allIconsPanel']"
       permanent
-      width="550"
+      width="500"
       location="right"
   >
     <template v-slot:prepend>
@@ -156,10 +156,18 @@ export default {
 <style scoped>
   .icon {
     cursor: move;
+    :deep(img) {
+      display: block;
+    }
   }
 
-  .iconContextMenu {
-    margin-left: 110px;
+  :deep(.v-list-group) {
+    --prepend-width: 70px;
+    --list-indent-size: 0px;
+  }
+
+  :deep(.v-list-item__prepend) {
+    width: var(--prepend-width);
   }
 
   .ghost {

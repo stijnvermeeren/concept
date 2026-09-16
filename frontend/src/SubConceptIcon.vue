@@ -5,22 +5,20 @@
       <v-btn
           @click="$emit('add')"
           title="Add another marker"
-          icon
-          size="small"
-          style="position: absolute; top: 0; right: 0;"
+          icon="mdi-plus-box-outline"
+          style="position: absolute; top: -10px; right: -10px;"
           color="primary"
+          variant="plain"
       >
-        <v-icon>mdi-plus-box-outline</v-icon>
       </v-btn>
       <v-btn
           :title="removeTitle"
           @click="$emit('remove')"
-          icon
-          size="small"
-          style="position: absolute; top: 0; left: 0;"
+          :icon="removeIconName"
+          style="position: absolute; top: -10px; left: -10px;"
           color="primary"
+          variant="plain"
       >
-        <v-icon>{{ removeIconName }}</v-icon>
       </v-btn>
     </div>
     <div class="pawns">
