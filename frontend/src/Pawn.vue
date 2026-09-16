@@ -1,5 +1,5 @@
 <template>
-  <span :class="[type, 'text--secondary']">{{symbol}}</span>
+  <span :class="[type, 'text-medium-emphasis']">{{symbol}}</span>
 </template>
 
 <script>

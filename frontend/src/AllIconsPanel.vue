@@ -1,11 +1,9 @@
 <template>
   <v-navigation-drawer
       :class="['allIconsPanel']"
-      app
       permanent
       width="550"
-      right
-      touchless
+      location="right"
   >
     <template v-slot:prepend>
       <v-card class="pa-3">
@@ -14,8 +12,7 @@
           <v-radio-group
               v-model="filter"
               mandatory
-              row
-              light
+              inline
               hide-details
               class="px-3 my-2"
           >
@@ -32,7 +29,7 @@
               v-model="query"
               label="Search concepts by query"
               placeholder="Query"
-              filled
+              variant="filled"
               clearable
               class="my-2"
               hide-details
@@ -43,9 +40,7 @@
 
     <v-list v-if="filteredConceptIds.length === 0">
       <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>No icons matching the query</v-list-item-title>
-        </v-list-item-content>
+        <v-list-item-title>No icons matching the query</v-list-item-title>
       </v-list-item>
     </v-list>
     <v-list v-else>
@@ -54,36 +49,38 @@
           v-show="filteredConceptIds.includes(key)"
           :key="key"
       >
-
-        <v-list-item slot="activator">
-          <draggable
-              :list="[key]"
-              :group="{name: 'allIcons', pull: 'clone', put: false}"
-              :sort="false"
-              :clone="cloneIcon"
-          >
-            <v-list-item-icon class="allIconsPanelIcon icon mt-0 mb-0">
-              <icon :icon-key="key"/>
-            </v-list-item-icon>
-          </draggable>
-          <v-list-item-content>
+        <template v-slot:activator="{ props }">
+          <v-list-item v-bind="props">
+            <template v-slot:prepend>
+              <draggable
+                  :list="[key]"
+                  :group="{name: 'allIcons', pull: 'clone', put: false}"
+                  :sort="false"
+                  :clone="cloneIcon"
+                  item-key="key"
+              >
+                <template #item>
+                  <div class="allIconsPanelIcon icon mt-0 mb-0">
+                    <icon :icon-key="key"/>
+                  </div>
+                </template>
+              </draggable>
+            </template>
             <v-list-item-title>
               {{ concepts[key].join(', ') }}
             </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+          </v-list-item>
+        </template>
         <v-list-item
             v-for="option in contextOptions"
             :key="option.index"
             @click="add(key, option.index)"
             class="iconContextMenu"
-            dense
+            density="compact"
         >
-          <v-list-item-content>
-            <v-list-item-title class="text-body-2">
-              {{option.name}}
-            </v-list-item-title>
-          </v-list-item-content>
+          <v-list-item-title class="text-body-2">
+            {{option.name}}
+          </v-list-item-title>
         </v-list-item>
       </v-list-group>
     </v-list>

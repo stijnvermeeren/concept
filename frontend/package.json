@@ -3,28 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "serve": "vite",
+    "build": "vite build",
+    "lint": "eslint src"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "lodash": "^4.17.21",
-    "uuid": "^9.0.0",
-    "vue": "^2.6.14",
-    "vue-native-websocket": "^2.0.15",
-    "vuedraggable": "^2.24.3",
-    "vuetify": "^2.6.12",
-    "vuex": "^3.6.2"
+    "uuid": "^11.1.1",
+    "vue": "^3.5.13",
+    "vue-native-websocket-vue3": "^3.1.8",
+    "vuedraggable": "^4.1.0",
+    "vuetify": "^3.7.15",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.16.3",
-    "@vue/cli-plugin-babel": "^5.0.8",
-    "@vue/cli-service": "^5.0.8",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.7.0",
-    "sass": "1.32.12",
-    "sass-loader": "^13.2.0",
-    "vuetify-loader": "^1.9.2",
-    "webpack": "^5.75.0"
+    "sass": "^1.69.0",
+    "vite": "^8.3.0"
   },
   "eslintConfig": {
     "root": true,
@@ -32,13 +30,10 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/vue3-essential",
       "eslint:recommended"
     ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
+    "rules": {}
   },
   "browserslist": [
     "> 1%",

@@ -6,10 +6,8 @@
           @click="$emit('add')"
           title="Add another marker"
           icon
-          small
-          absolute
-          top
-          right
+          size="small"
+          style="position: absolute; top: 0; right: 0;"
           color="primary"
       >
         <v-icon>mdi-plus-box-outline</v-icon>
@@ -18,10 +16,8 @@
           :title="removeTitle"
           @click="$emit('remove')"
           icon
-          small
-          absolute
-          top
-          left
+          size="small"
+          style="position: absolute; top: 0; left: 0;"
           color="primary"
       >
         <v-icon>{{ removeIconName }}</v-icon>
@@ -85,16 +81,6 @@
     padding-right: 12px;
     padding-left: 12px;
     cursor: move;
-  }
-
-  .v-btn--absolute.v-btn--right {
-    right: 0;
-  }
-  .v-btn--absolute.v-btn--top {
-    top: 0;
-  }
-  .v-btn--absolute.v-btn--left {
-    left: 0;
   }
 
   .pawns {

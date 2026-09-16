@@ -1,6 +1,6 @@
 <template>
   <v-app :class="{waiting: isWaiting}">
-    <v-main app>
+    <v-main>
       <all-icons-panel />
       <v-container>
         <h1>Concept: online version</h1>
@@ -26,7 +26,7 @@
         </div>
       </v-container>
     </v-main>
-    <v-footer app>
+    <v-footer>
       <v-row justify="center" no-gutters>
         <div v-if="$store.state.socket.isConnected" class="connected">Connected</div>
         <div v-else class="disconnected">Disconnected</div>

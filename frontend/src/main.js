@@ -1,28 +1,23 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import Vuetify from 'vuetify/lib'
-import VueNativeSock from 'vue-native-websocket'
+import { createApp } from 'vue'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import VueNativeSock from 'vue-native-websocket-vue3'
 import App from './App.vue'
 import store from './store'
+import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css'
 
-Vue.use(Vuex)
+const vuetify = createVuetify({ components, directives })
 
-Vue.use(Vuetify)
-
-Vue.use(
-  VueNativeSock,
-  process.env.VUE_APP_WEBSOCKET_URL,
-  {
-    store: store,
-    format: 'json',
-    reconnection: true, // (Boolean) whether to reconnect automatically (false)
-    reconnectionAttempts: 5, // (Number) number of reconnection attempts before giving up (Infinity),
-    reconnectionDelay: 3000 // (Number) how long to initially wait before attempting a new (1000),
-  }
-)
-
-new Vue({
-  render: h => h(App),
+const app = createApp(App)
+app.use(store)
+app.use(vuetify)
+app.use(VueNativeSock, import.meta.env.VUE_APP_WEBSOCKET_URL, {
   store,
-  vuetify: new Vuetify()
-}).$mount('#app')
+  format: 'json',
+  reconnection: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 3000
+})
+app.mount('#app')
