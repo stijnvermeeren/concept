@@ -5,7 +5,7 @@
         <div v-if="$store.state.socket.isConnected" class="connected">Connected</div>
         <div v-else class="disconnected">Disconnected</div>
         <div class="ml-6">
-          Source code and more information on <a href="https://github.com/stijnvermeeren/concept">Github</a>.
+          Source code and more information on <a href="https://github.com/stijnvermeeren/concept">GitHub</a>.
         </div>
       </v-row>
     </v-footer>
