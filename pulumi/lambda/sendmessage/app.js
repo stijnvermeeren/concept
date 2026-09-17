@@ -46,10 +46,10 @@ exports.handler = async (event, context) => {
     }));
 
     try {
-      await apigw.send(new PostToConnectionCommand({ ConnectionId: event.requestContext.connectionId, Data: postData }));
-    } catch(error) {
+      await apigw.send(new PostToConnectionCommand({ ConnectionId: event.requestContext.connectionId, Data: Buffer.from(postData) }));
+    } catch (error) {
       console.log(`Error when sending game state to connection ${event.requestContext.connectionId}`, error);
-      return { statusCode: 500, body: error };
+      return { statusCode: 500, body: String(error) };
     }
 
     return { statusCode: 200, body: 'Data sent.' };
