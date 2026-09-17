@@ -1,14 +1,23 @@
 <template>
   <v-app :class="{waiting: isWaiting}">
-    <v-main app>
-      <all-icons-panel />
+    <v-footer app color="grey-lighten-3">
+      <v-row justify="center" no-gutters>
+        <div v-if="$store.state.socket.isConnected" class="connected">Connected</div>
+        <div v-else class="disconnected">Disconnected</div>
+        <div class="ml-6">
+          Source code and more information on <a href="https://github.com/stijnvermeeren/concept">GitHub</a>.
+        </div>
+      </v-row>
+    </v-footer>
+    <all-icons-panel />
+    <v-main>
       <v-container>
         <h1>Concept: online version</h1>
         <template v-if="gameId">
           <v-card flat>
             <v-card-text>
               Invite others to this game with this URL:
-              <v-chip @click="copyUrl" label><v-icon left>mdi-content-copy</v-icon> {{url}}</v-chip>
+              <v-chip @click="copyUrl" prepend-icon="mdi-content-copy" label>{{url}}</v-chip>
             </v-card-text>
           </v-card>
           <div v-if="isInitialised">
@@ -26,15 +35,6 @@
         </div>
       </v-container>
     </v-main>
-    <v-footer app>
-      <v-row justify="center" no-gutters>
-        <div v-if="$store.state.socket.isConnected" class="connected">Connected</div>
-        <div v-else class="disconnected">Disconnected</div>
-        <div class="ml-6">
-          Source code and more information on <a href="https://github.com/stijnvermeeren/concept">Github</a>.
-        </div>
-      </v-row>
-    </v-footer>
   </v-app>
 </template>
 

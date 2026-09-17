@@ -52,19 +52,19 @@ new aws.iam.RolePolicy("lambdaRolePolicy", {
 
 new aws.iam.RolePolicyAttachment("lambdaRolePolicy2", {
     role: lambdaRole.id,
-    policyArn: aws.iam.ManagedPolicies.AWSLambdaBasicExecutionRole
+    policyArn: aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole
 });
 
 export const onConnectFunction = new aws.lambda.Function("onConnectFunction", {
     role: lambdaRole.arn,
     handler: "app.handler",
-    runtime: "nodejs14.x",
+    runtime: "nodejs22.x",
     code: new pulumi.asset.FileArchive("lambda/onconnect")
 });
 export const sendMessageFunction = new aws.lambda.Function("sendMessageFunction", {
     role: lambdaRole.arn,
     handler: "app.handler",
-    runtime: "nodejs14.x",
+    runtime: "nodejs22.x",
     code: new pulumi.asset.FileArchive("lambda/sendmessage"),
     environment: {
         variables: {
@@ -76,7 +76,7 @@ export const sendMessageFunction = new aws.lambda.Function("sendMessageFunction"
 export const onDisconnectFunction = new aws.lambda.Function("onDisconnectFunction", {
     role: lambdaRole.arn,
     handler: "app.handler",
-    runtime: "nodejs14.x",
+    runtime: "nodejs22.x",
     code: new pulumi.asset.FileArchive("lambda/ondisconnect"),
     environment: {
         variables: {

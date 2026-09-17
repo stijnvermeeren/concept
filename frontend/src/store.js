@@ -1,12 +1,12 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { nextTick } from 'vue'
+import { createStore } from 'vuex'
 import _ from "lodash";
 import {addToSubConcept, removeFromSubConcept} from "@/util/subconcept";
 import {v4 as uuidv4} from "uuid";
 
-Vue.use(Vuex);
+let socket = null
 
-export default new Vuex.Store({
+export default createStore({
   state: {
     socket: {
       isConnected: false,
@@ -26,9 +26,9 @@ export default new Vuex.Store({
   },
   mutations: {
     SOCKET_ONOPEN (state, event)  {
-      Vue.prototype.$socket = event.currentTarget
+      socket = event.currentTarget
       state.socket.isConnected = true
-      Vue.prototype.$socket.sendObj({
+      socket.sendObj({
         message: 'sendmessage',
         data: {
           action: 'connectToGame',
@@ -95,11 +95,11 @@ export default new Vuex.Store({
     },
     send({ state, commit }) {
       // Avoid sending two messages through the websocket when dragging an icon from one sub-concept to another.
-      Vue.nextTick(() => {
+      nextTick(() => {
         if (state.needsSending) {
           const stateId = uuidv4()
           commit('waitForStateId', stateId)
-          Vue.prototype.$socket.sendObj({
+          socket.sendObj({
             message: 'sendmessage',
             data: {
               action: 'newState',

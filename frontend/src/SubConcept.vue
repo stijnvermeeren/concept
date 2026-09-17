@@ -1,7 +1,6 @@
 <template>
   <v-sheet
       :class="['sheet', colorClass, 'pl-3', 'pr-3', 'pt-2', 'pb-2', 'mt-3', 'mb-3', 'ml-4', 'mr-4']"
-      :shaped="true"
       :elevation="5"
   >
     <v-container>
@@ -12,26 +11,30 @@
           class="subConceptContainer row"
           ghostClass="ghost"
           filter=".v-btn"
+          item-key="key"
       >
-        <v-col v-show="!summarize.length" slot="header" class="subConceptPlaceholder">
-          Drag an icon here to start a new sub‑concept.
-        </v-col>
-        <v-col
-            v-for="{key, count}, iconIndex in summarize"
-            :key="key"
-            :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
-        >
-          <v-icon v-if="iconIndex === 0" class="insertBeforeGhost" color="secondary" large>mdi-chevron-down</v-icon>
-          <sub-concept-icon
-              :icon-key="key"
-              :count="count"
-              :is-main-icon="iconIndex === 0"
-              :is-main-concept="index === 0"
-              @add="add(key)"
-              @remove="remove(key)"
-          />
-          <v-icon class="insertGhost" color="secondary" large>mdi-chevron-down</v-icon>
-        </v-col>
+        <template #header>
+          <v-col v-show="!summarize.length" class="subConceptPlaceholder">
+            Drag an icon here to start a new sub‑concept.
+          </v-col>
+        </template>
+        <template #item="{ element: {key, count}, index: iconIndex }">
+          <v-col
+              :key="key"
+              :class="['subConceptItem', {mainIcon: iconIndex === 0}]"
+          >
+            <v-icon v-if="iconIndex === 0" class="insertBeforeGhost" color="secondary" size="large">mdi-chevron-down</v-icon>
+            <sub-concept-icon
+                :icon-key="key"
+                :count="count"
+                :is-main-icon="iconIndex === 0"
+                :is-main-concept="index === 0"
+                @add="add(key)"
+                @remove="remove(key)"
+            />
+            <v-icon class="insertGhost" color="secondary" size="large">mdi-chevron-down</v-icon>
+          </v-col>
+        </template>
       </draggable>
     </v-container>
   </v-sheet>
@@ -78,17 +81,17 @@
       colorClass() {
         switch (this.index) {
           case 0:
-            return 'green lighten-4'
+            return 'bg-green-lighten-4'
           case 1:
-            return 'blue lighten-4'
+            return 'bg-blue-lighten-4'
           case 2:
-            return 'red lighten-4'
+            return 'bg-red-lighten-4'
           case 3:
-            return 'deep-orange lighten-4'
+            return 'bg-deep-orange-lighten-4'
           case 4:
-            return 'amber lighten-4'
+            return 'bg-amber-lighten-4'
           default:
-            return 'blue-grey lighten-4'
+            return 'bg-blue-grey-lighten-4'
         }
       }
     },
@@ -107,11 +110,9 @@
 </script>
 
 <style lang="scss">
-  @import '~vuetify/src/styles/main.sass';
-
   .sheet:has(.ghost) {
-    @extend .lighten-3;
-    @extend .elevation-15;
+    filter: brightness(0.94);
+    box-shadow: 0px 8px 10px -5px rgba(0,0,0,.2), 0px 16px 24px 2px rgba(0,0,0,.14), 0px 6px 30px 5px rgba(0,0,0,.12) !important;
   }
 </style>
 
